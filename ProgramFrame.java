@@ -31,19 +31,18 @@ public class ProgramFrame extends JFrame{
 
 		split1.setDividerSize(0);
 		split2.setDividerSize(0);
-		split1.setDividerLocation(width/3);
-		split2.setDividerLocation(width/3);
+		int splitWidth = width / 10;
+		split1.setDividerLocation(3 * splitWidth);
+		split2.setDividerLocation(4 * splitWidth);
 
-		split1.setResizeWeight(1.0);
-		split2.setResizeWeight(1.0);
+		split1.setResizeWeight(0.3);
+		split2.setResizeWeight(0.3);
 
 		split2.setLeftComponent(MM);
 		split2.setRightComponent(AB);
 		split1.setLeftComponent(TE);
 		split1.setRightComponent(split2);
 
-		split1.setResizeWeight(0.5);
-		split2.setResizeWeight(0.5);
 
 		setLayout( new GridBagLayout() );
 
