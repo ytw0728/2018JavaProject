@@ -35,8 +35,8 @@ public class ProgramFrame extends JFrame{
 		split1.setDividerLocation(3 * splitWidth);
 		split2.setDividerLocation(4 * splitWidth);
 
-		split1.setResizeWeight(0.3);
-		split2.setResizeWeight(0.3);
+		split1.setResizeWeight(0.33);
+		split2.setResizeWeight(0.66);
 
 		split2.setLeftComponent(MM);
 		split2.setRightComponent(AB);
