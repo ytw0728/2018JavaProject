@@ -1,15 +1,8 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
-public class ProgramFrame {
-	private JFrame frame;
-	
+public class ProgramFrame extends JFrame{
 	private MenuBar MenuBar;
 	private ToolBar ToolBar;
 	private TextEditorPane 	TE;
@@ -24,48 +17,57 @@ public class ProgramFrame {
 		this(width, height, MindMap.defaultSize[2], MindMap.defaultSize[3]);
 	}
 	public ProgramFrame(int width, int height, int x, int y) {
-		frame = new JFrame("∏∂¿ŒµÂ∏ ");
-		MenuBar = new MenuBar(width, height/5);
-		ToolBar = new ToolBar(width, height/5);
+		MenuBar = new MenuBar(width, height/10);
+		ToolBar = new ToolBar(width, height/10);
 		
 		int mainCompHeight = (height/5) * 2;
-		
+
+		JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		JSplitPane split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+
 		TE = new TextEditorPane(width/4,mainCompHeight,"Text Editor Pane");
 		MM = new MindMapPane(width/2,mainCompHeight,"Mind Map Pane");
 		AB = new AttributePane(width/4,mainCompHeight,"Attribute Pane");
-		
-		
-		frame.setLayout( new GridBagLayout() );
 
-		frame.setSize(width,height);
-		frame.setLocation(x, y);
+		split1.setDividerSize(0);
+		split2.setDividerSize(0);
+		split1.setDividerLocation(width/3);
+		split2.setDividerLocation(width/3);
+
+		split1.setResizeWeight(1.0);
+		split2.setResizeWeight(1.0);
+
+		split2.setLeftComponent(MM);
+		split2.setRightComponent(AB);
+		split1.setLeftComponent(TE);
+		split1.setRightComponent(split2);
+
+		split1.setResizeWeight(0.5);
+		split2.setResizeWeight(0.5);
+
+		setLayout( new GridBagLayout() );
+
+		setSize(width,height);
+		setLocation(x, y);
 		
-		layout(MenuBar.component(),0,0,5,1);
-		layout(ToolBar.component(),0,1,5,1);
-		layout(TE.component(),0,2,1,5);
-		layout(MM.component(),1,2,3,5);
-		layout(AB.component(),4,2,1,5);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		layout(MenuBar,0,0,8,1,8,1);
+		layout(ToolBar,0,1,8,1,8,1);
+		layout(split1,0,2,8,24,8,24);
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	private void layout( JComponent comp, int x, int y, int width, int height) {
+	private void layout( JComponent comp, int x, int y, double width, double height, int gWidth, int gHeight) {
 		GridBagConstraints c = new GridBagConstraints();
 
-		c.weightx = c.weighty= 1.0;
+		c.weightx = width;
+		c.weighty = height;
 		c.fill = c.BOTH;
 		c.gridx = x;
 		c.gridy = y;
-		c.gridwidth = width;
-		c.gridheight = height;
-		
-		frame.add(comp, c);
-	}
-	public JFrame component() {
-		return frame;
-	}
-	
-	public void setVisible(Boolean b) {
-		frame.setVisible(b);
+		c.gridwidth = gWidth;
+		c.gridheight = gHeight;
+
+		add(comp, c);
 	}
 }
