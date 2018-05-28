@@ -8,8 +8,7 @@ public class ProgramFrame extends JFrame{
 	private TextEditorPane 	TE;
 	private MindMapPane 	MM;
 	private AttributePane 	AB;
-	
-	
+
 	public ProgramFrame(){
 		this(MindMap.defaultSize[0], MindMap.defaultSize[1],MindMap.defaultSize[2], MindMap.defaultSize[3]);
 	}

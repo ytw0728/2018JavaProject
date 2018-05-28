@@ -10,14 +10,13 @@ public class MindMapPane extends JPanel {
 
         setSize(x,y);
         setMinimumSize(new Dimension(x,y));
-        setPreferredSize(new Dimension(x,y) );
+        setPreferredSize(new Dimension(x,y));
         setMaximumSize(new Dimension(x,y));
 
         JLabel label = new JLabel(str);
 
         int labelWidth = 130;
-        label.setLocation(getWidth()/2 - labelWidth/2,0);
-        label.setSize(labelWidth, y/10);
+        label.setSize(labelWidth, y/20);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBackground(Color.WHITE);
         label.setOpaque(true);
@@ -28,8 +27,7 @@ public class MindMapPane extends JPanel {
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-//                label.setSize(getWidth(), getHeight()/20 );
-                label.setLocation(getWidth()/2,0);
+                label.setSize(getWidth(), getHeight()/20 );
             }
         });
 

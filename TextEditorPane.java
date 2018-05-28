@@ -15,6 +15,7 @@ public class TextEditorPane extends JTextArea {
 
         JLabel label = new JLabel(str);
         label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setSize(getWidth(), getHeight()/20);
         label.setBackground(Color.WHITE);
         label.setOpaque(true);
         add(label);
@@ -24,7 +25,7 @@ public class TextEditorPane extends JTextArea {
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-//                label.setSize(getWidth(), getHeight()/20 );
+                label.setSize(getWidth(), getHeight()/20 );
             }
         });
 
