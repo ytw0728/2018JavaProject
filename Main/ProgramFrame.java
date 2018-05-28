@@ -1,19 +1,27 @@
+package Main;
+
+import Panels.AttributePane;
+import Panels.MindMapPane;
+import Panels.TextEditorPane;
+import UtilBars.MenuBar;
+import UtilBars.ToolBar;
+
 import java.awt.*;
 
 import javax.swing.*;
 
 public class ProgramFrame extends JFrame{
-	private MenuBar MenuBar;
-	private ToolBar ToolBar;
-	private TextEditorPane 	TE;
+	private UtilBars.MenuBar MenuBar;
+	private UtilBars.ToolBar ToolBar;
+	private TextEditorPane TE;
 	private MindMapPane 	MM;
 	private AttributePane 	AB;
 
 	public ProgramFrame(){
-		this(MindMap.defaultSize[0], MindMap.defaultSize[1],MindMap.defaultSize[2], MindMap.defaultSize[3]);
+		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
 	}
 	public ProgramFrame(int width, int height) {
-		this(width, height, MindMap.defaultSize[2], MindMap.defaultSize[3]);
+		this(width, height, Main.defaultSize[2], Main.defaultSize[3]);
 	}
 	public ProgramFrame(int width, int height, int x, int y) {
 		int CompHeight = (height/20);
@@ -26,7 +34,7 @@ public class ProgramFrame extends JFrame{
 
 		TE = new TextEditorPane(width/4,CompHeight*18,"Text Editor Pane");
 		MM = new MindMapPane(width/2,CompHeight*18,"Mind Map Pane");
-		AB = new AttributePane(width/4,CompHeight*18,"Attribute Pane");
+		AB = new AttributePane(width/4,CompHeight*18,"Panels.Attribute Pane");
 
 		split1.setDividerSize(0);
 		split2.setDividerSize(0);
@@ -44,7 +52,8 @@ public class ProgramFrame extends JFrame{
 		split1.setRightComponent(split2);
 
 		split1.setBounds(0,CompHeight*2, width, CompHeight*18);
-
+		split1.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+		split2.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
 		setLayout(null);
 
 		setSize(width,height);
