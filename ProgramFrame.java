@@ -16,23 +16,24 @@ public class ProgramFrame extends JFrame{
 		this(width, height, MindMap.defaultSize[2], MindMap.defaultSize[3]);
 	}
 	public ProgramFrame(int width, int height, int x, int y) {
-		MenuBar = new MenuBar(width, height/10);
-		ToolBar = new ToolBar(width, height/10);
-		
-		int mainCompHeight = (height/5) * 2;
+		int CompHeight = (height/20);
+
+		MenuBar = new MenuBar(0,0,width, CompHeight);
+		ToolBar = new ToolBar(0,CompHeight,width, CompHeight);
 
 		JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-		TE = new TextEditorPane(width/4,mainCompHeight,"Text Editor Pane");
-		MM = new MindMapPane(width/2,mainCompHeight,"Mind Map Pane");
-		AB = new AttributePane(width/4,mainCompHeight,"Attribute Pane");
+		TE = new TextEditorPane(width/4,CompHeight*18,"Text Editor Pane");
+		MM = new MindMapPane(width/2,CompHeight*18,"Mind Map Pane");
+		AB = new AttributePane(width/4,CompHeight*18,"Attribute Pane");
 
 		split1.setDividerSize(0);
 		split2.setDividerSize(0);
-		int splitWidth = width / 10;
+
+		int splitWidth = width / 12;
 		split1.setDividerLocation(3 * splitWidth);
-		split2.setDividerLocation(4 * splitWidth);
+		split2.setDividerLocation(6 * splitWidth);
 
 		split1.setResizeWeight(0.33);
 		split2.setResizeWeight(0.66);
@@ -42,30 +43,21 @@ public class ProgramFrame extends JFrame{
 		split1.setLeftComponent(TE);
 		split1.setRightComponent(split2);
 
+		split1.setBounds(0,CompHeight*2, width, CompHeight*18);
 
-		setLayout( new GridBagLayout() );
+		setLayout(null);
 
 		setSize(width,height);
 		setLocation(x, y);
 		
-		layout(MenuBar,0,0,8,1,8,1);
-		layout(ToolBar,0,1,8,1,8,1);
-		layout(split1,0,2,8,24,8,24);
+		layout(MenuBar);
+		layout(ToolBar);
+		layout(split1);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	private void layout( JComponent comp, int x, int y, double width, double height, int gWidth, int gHeight) {
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.weightx = width;
-		c.weighty = height;
-		c.fill = c.BOTH;
-		c.gridx = x;
-		c.gridy = y;
-		c.gridwidth = gWidth;
-		c.gridheight = gHeight;
-
-		add(comp, c);
+	private void layout( JComponent comp) {
+		add(comp);
 	}
 }

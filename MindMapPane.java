@@ -8,7 +8,7 @@ public class MindMapPane extends JPanel {
         JScrollPane scroll = new JScrollPane();
         setLayout(null);
 
-        setSize(x,y);
+        setBounds(0,0, x, y);
         setMinimumSize(new Dimension(x,y));
         setPreferredSize(new Dimension(x,y));
         setMaximumSize(new Dimension(x,y));
