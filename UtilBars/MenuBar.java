@@ -1,10 +1,12 @@
 package UtilBars;
 
 import Main.Main;
+import Main.ProgramFrame;
 import java.awt.*;
 import javax.swing.*;
 
 public class MenuBar extends JMenuBar {
+    ProgramFrame parent = null;
 	public MenuBar() { 	this(0,0, Main.defaultSize[0], Main.defaultSize[1]/3); }
 	public MenuBar(int x, int y, int width, int height) {
 		setBounds(x,y, width, height);
@@ -21,4 +23,5 @@ public class MenuBar extends JMenuBar {
 		}
 		setBackground(Color.WHITE);
 	}
+    public void setParent(ProgramFrame frame){ parent = frame;}
 }

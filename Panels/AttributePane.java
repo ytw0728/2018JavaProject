@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class AttributePane extends JPanel{
+    JFrame parent = null;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
 
@@ -46,6 +47,7 @@ public class AttributePane extends JPanel{
             }
         });
     }
+    public void setParent(JFrame frame){ parent = frame;}
 }
 
 class Attribute extends JPanel{

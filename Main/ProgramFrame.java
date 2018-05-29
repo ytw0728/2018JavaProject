@@ -7,6 +7,8 @@ import UtilBars.MenuBar;
 import UtilBars.ToolBar;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -16,6 +18,9 @@ public class ProgramFrame extends JFrame{
 	private TextEditorPane TE;
 	private MindMapPane 	MM;
 	private AttributePane 	AB;
+	private HashMap componentsMap = new HashMap();
+
+
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -49,6 +54,7 @@ public class ProgramFrame extends JFrame{
 		split2.setLeftComponent(MM);
 		split2.setRightComponent(AB);
 		split1.setLeftComponent(TE);
+
 		split1.setRightComponent(split2);
 
 		split1.setBounds(0,CompHeight*2, width, CompHeight*18);
@@ -64,9 +70,23 @@ public class ProgramFrame extends JFrame{
 		layout(split1);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		componentsMap.put("TE",TE);
+		componentsMap.put("MM",MM);
+		componentsMap.put("AB",AB);
+		componentsMap.put("MenuBar", MenuBar);
+		componentsMap.put("ToolBar",ToolBar);
 	}
 	
 	private void layout( JComponent comp) {
 		add(comp);
+	}
+	public HashMap getComponentsMap(){return componentsMap;}
+	public void setComponentsParent(){
+		MenuBar.setParent(this);
+		ToolBar.setParent(this);
+		MM.setParent(this);
+		AB.setParent(this);
+		TE.setParent(this);
 	}
 }
