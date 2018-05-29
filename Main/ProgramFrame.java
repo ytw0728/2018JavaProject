@@ -1,5 +1,6 @@
 package Main;
 
+import Configs.Colors.ColorSwitch;
 import Panels.AttributePane;
 import Panels.MindMapPane;
 import Panels.TextEditorPane;
@@ -58,8 +59,8 @@ public class ProgramFrame extends JFrame{
 		split1.setRightComponent(split2);
 
 		split1.setBounds(0,CompHeight*2, width, CompHeight*18);
-		split1.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
-		split2.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+		split1.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+		split2.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
 		setLayout(null);
 
 		setSize(width,height);

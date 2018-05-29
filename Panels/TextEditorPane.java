@@ -3,12 +3,12 @@ package Panels;
 import Components.BlueButton;
 import Components.DarkLabel;
 
+import Configs.Colors.ColorSwitch;
+import Configs.Fonts.FontSwitch;
 import DataStructures.JSONNode;
 
 import Main.ProgramFrame;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,27 +25,24 @@ public class TextEditorPane extends JPanel {
 
         DarkLabel label = new DarkLabel(str);
         label.setBounds(0,0,x, y/20);
-        label.setBackground(new Color(40,44,52));
-        label.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         add(label);
 
         TextEditor editor = new TextEditor(0,0, x, y - y/20);
-        editor.setFont(new Font("", Font.PLAIN, 28));
-        editor.setLineWrap(true);
-        editor.setWrapStyleWord(true);
         JScrollPane scroll = new JScrollPane(editor);
         scroll.setBounds(0,y/20,x,y - 4*y/20);
-        scroll.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+        scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("Àû¿ëÇÏ±â");
         applicationBtn.setBounds(0,y - 3*y/20, x, 2*y/20);
-        applicationBtn.setBackground(new Color(100,148,237));
-        applicationBtn.setBorder(BorderFactory.createLineBorder (new Color(100,148,237), 1));
+        applicationBtn.setBackground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
+        applicationBtn.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.KEYCOLOR), 1));
         add(applicationBtn);
 
-        setBorder(BorderFactory.createLineBorder (new Color(47,51,61), 1));
-        setBackground(new Color(40,44,52));
+        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        setBackground(ColorSwitch.init(ColorSwitch.DARK));
         setVisible(true);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -83,13 +80,14 @@ public class TextEditorPane extends JPanel {
 class TextEditor extends JTextArea {
     public TextEditor(int x, int y, int width, int height) {
         setBounds(x,y, width, height);
-        setBackground(new Color(47,51,61));
-        setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 10));
+        setBackground( ColorSwitch.init(ColorSwitch.BRIGHT) );
         setTabSize(3);
-
+        setFont(FontSwitch.init(FontSwitch.EDITOR));
+        setLineWrap(true);
+        setWrapStyleWord(true);
         setCaretColor(Color.WHITE);
 
-        setBorder(BorderFactory.createLineBorder (new Color(47,51,61), 1));
+        setBorder(BorderFactory.createLineBorder ( ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setForeground(Color.WHITE);
         setVisible(true);
     }

@@ -1,5 +1,6 @@
 package UtilBars;
 
+import Configs.Fonts.FontSwitch;
 import Main.Main;
 import Main.ProgramFrame;
 import java.awt.*;
@@ -18,7 +19,7 @@ public class MenuBar extends JMenuBar {
 		menus[4] = new JMenu("´Ý±â");
 
 		for( int i = 0; i < 5; i++ ){
-			menus[i].setFont(new Font("¸¼Àº °íµñ",  Font.PLAIN, 13));
+			menus[i].setFont(FontSwitch.init(FontSwitch.MENUBAR));
 			add(menus[i]);
 		}
 		setBackground(Color.WHITE);

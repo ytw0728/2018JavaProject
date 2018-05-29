@@ -2,6 +2,7 @@ package Panels;
 
 import Components.BlueButton;
 import Components.DarkLabel;
+import Configs.Colors.ColorSwitch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,24 +21,24 @@ public class AttributePane extends JPanel{
 
         DarkLabel label = new DarkLabel(str);
         label.setSize(getWidth(), getHeight()/20);
-        label.setBackground(new Color(40,44,52));
-        label.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         add(label);
 
         Attribute attr = new Attribute(0,y/20, x, y- y/20);
         JScrollPane scroll = new JScrollPane(attr);
         scroll.setBounds(0,y/20,x,y - 4*y/20);
-        scroll.setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+        scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("∫Ø∞Ê«œ±‚");
         applicationBtn.setBounds(0,y - 3*y/20, x, 2*y/20);
         applicationBtn.setBackground(new Color(100,148,237));
-        applicationBtn.setBorder(BorderFactory.createLineBorder (new Color(100,148,237), 1));
+        applicationBtn.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.KEYCOLOR), 1));
         add(applicationBtn);
 
 
-        setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         setBackground(new Color(47,51,61));
         setVisible(true);
 
@@ -55,7 +56,7 @@ class Attribute extends JPanel{
         setBounds(x,y, width, height);
         setBackground(new Color(47,51,61));
         setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 10));
-        setBorder(BorderFactory.createLineBorder (new Color(47,51,61), 1));
+        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setForeground(Color.WHITE);
         setVisible(true);
     }

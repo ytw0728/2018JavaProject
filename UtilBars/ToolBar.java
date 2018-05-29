@@ -1,5 +1,7 @@
 package UtilBars;
 
+import Configs.Colors.ColorSwitch;
+import Configs.Fonts.FontSwitch;
 import Main.Main;
 import Main.ProgramFrame;
 import java.awt.*;
@@ -13,8 +15,8 @@ public class ToolBar extends JToolBar{
 	public ToolBar(int x, int y, int width, int height) {
 		setLayout(new FlowLayout(FlowLayout.LEADING, 10, 0));
 		setBounds(x,y, width, height);
-		setBackground(new Color(40,44,52));
-		setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+		setBackground(ColorSwitch.init(ColorSwitch.DARK));
+		setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
 
 		JButton[] menus = new JButton[5];
 		menus[0] = new JButton("¿˙¿Â");
@@ -25,10 +27,10 @@ public class ToolBar extends JToolBar{
 
 		for( int i = 0; i < 5; i++ ){
 			menus[i].setHorizontalAlignment(CENTER);
-			menus[i].setFont(new Font("∏º¿∫ ∞ÌµÒ",  Font.PLAIN, 13));
+			menus[i].setFont( FontSwitch.init(FontSwitch.MENUBAR));
 			menus[i].setForeground(Color.WHITE);
-			menus[i].setBackground(new Color(40,44,52) );
-			menus[i].setBorder(BorderFactory.createLineBorder (new Color(40,44,52), 1));
+			menus[i].setBackground(ColorSwitch.init(ColorSwitch.DARK));
+			menus[i].setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
 			add(menus[i]);
 		}
 
