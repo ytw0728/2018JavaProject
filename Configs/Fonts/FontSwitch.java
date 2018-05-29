@@ -7,7 +7,7 @@ public class FontSwitch extends Font {
     public static FontSwitch init(int option){
         switch(option){
             case EDITOR:
-                return new FontSwitch("맑은 고딕", Font.PLAIN, 28);
+                return new FontSwitch("맑은 고딕", Font.PLAIN, 20);
             case LABELTEXT:
                 return new FontSwitch("맑은 고딕", Font.PLAIN, 16);
             case SMALL :
@@ -17,7 +17,7 @@ public class FontSwitch extends Font {
             case MENUBAR :
             case NORMAL :
             default :
-                return new FontSwitch("맑은 고딕",Font.PLAIN,13);
+                return new FontSwitch("Dotum",Font.PLAIN,13);
         }
     }
     public FontSwitch(){

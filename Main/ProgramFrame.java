@@ -8,6 +8,8 @@ import UtilBars.MenuBar;
 import UtilBars.ToolBar;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,17 +32,23 @@ public class ProgramFrame extends JFrame{
 		this(width, height, Main.defaultSize[2], Main.defaultSize[3]);
 	}
 	public ProgramFrame(int width, int height, int x, int y) {
-		int CompHeight = (height/20);
+		setLayout(null);
+		this.pack();
+		Insets insets = getInsets();
+		this.setBounds(0,0, insets.left + width + insets.right, insets.top + height + insets.bottom);
+		this.setLocationRelativeTo(null);
 
-		MenuBar = new MenuBar(0,0,width, CompHeight);
-		ToolBar = new ToolBar(0,CompHeight,width, CompHeight);
+		int CompHeight = (height / 22);
+
+		MenuBar = new MenuBar(0, 0, width, CompHeight);
+		ToolBar = new ToolBar(0, CompHeight, width, CompHeight);
 
 		JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-		TE = new TextEditorPane(width/4,CompHeight*18,"Text Editor Pane");
-		MM = new MindMapPane(width/2,CompHeight*18,"Mind Map Pane");
-		AB = new AttributePane(width/4,CompHeight*18,"Panels.Attribute Pane");
+		TE = new TextEditorPane(width / 4, CompHeight * 20, "Text Editor Pane");
+		MM = new MindMapPane(width / 2, CompHeight * 20, "Mind Map Pane");
+		AB = new AttributePane(width / 4, CompHeight * 20, "Panels.Attribute Pane");
 
 		split1.setDividerSize(0);
 		split2.setDividerSize(0);
@@ -49,8 +57,8 @@ public class ProgramFrame extends JFrame{
 		split1.setDividerLocation(3 * splitWidth);
 		split2.setDividerLocation(6 * splitWidth);
 
-		split1.setResizeWeight(0.33);
-		split2.setResizeWeight(0.66);
+		split1.setResizeWeight(0.1);
+		split2.setResizeWeight(0);
 
 		split2.setLeftComponent(MM);
 		split2.setRightComponent(AB);
@@ -58,27 +66,37 @@ public class ProgramFrame extends JFrame{
 
 		split1.setRightComponent(split2);
 
-		split1.setBounds(0,CompHeight*2, width, CompHeight*18);
-		split1.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
-		split2.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
-		setLayout(null);
+		split1.setBounds(0, CompHeight * 2, width, CompHeight * 18);
+		split1.setBorder(BorderFactory.createLineBorder(ColorSwitch.init(ColorSwitch.DARK), 1));
+		split2.setBorder(BorderFactory.createLineBorder(ColorSwitch.init(ColorSwitch.DARK), 1));
 
-		setSize(width,height);
-		setLocation(x, y);
-		
 		layout(MenuBar);
 		layout(ToolBar);
 		layout(split1);
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		componentsMap.put("TE",TE);
-		componentsMap.put("MM",MM);
-		componentsMap.put("AB",AB);
+		componentsMap.put("TE", TE);
+		componentsMap.put("MM", MM);
+		componentsMap.put("AB", AB);
 		componentsMap.put("MenuBar", MenuBar);
-		componentsMap.put("ToolBar",ToolBar);
+		componentsMap.put("ToolBar", ToolBar);
+
+		this.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
+				Dimension size = getContentPane().getSize();
+				MenuBar.setSize(size.width, MenuBar.getHeight());
+				ToolBar.setSize(size.width, ToolBar.getHeight());
+				split1.setSize(size.width, size.height - MenuBar.getHeight() - ToolBar.getHeight());
+				split2.setSize(size.width - TE.getWidth(), size.height);
+				TE.setSize(3*size.width/12, size.height );
+				AB.setSize( 3*size.width/12, size.height);
+				MM.setSize(split2.getWidth() - AB.getWidth(), size.height);
+				split1.setDividerLocation(TE.getWidth());
+				split2.setDividerLocation(split2.getWidth() - AB.getWidth());
+			}
+		});
+
 	}
-	
 	private void layout( JComponent comp) {
 		add(comp);
 	}

@@ -27,14 +27,12 @@ public class AttributePane extends JPanel{
 
         Attribute attr = new Attribute(0,y/20, x, y- y/20);
         JScrollPane scroll = new JScrollPane(attr);
-        scroll.setBounds(0,y/20,x,y - 4*y/20);
+        scroll.setBounds(0,y/20,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("변경하기");
-        applicationBtn.setBounds(0,y - 3*y/20, x, 2*y/20);
-        applicationBtn.setBackground(new Color(100,148,237));
-        applicationBtn.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.KEYCOLOR), 1));
+        applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
         add(applicationBtn);
 
 
@@ -42,9 +40,13 @@ public class AttributePane extends JPanel{
         setBackground(new Color(47,51,61));
         setVisible(true);
 
+
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                label.setSize(getWidth(), getHeight()/20 );
+                Dimension size = getSize();
+                label.setBounds(0,0,size.width, label.getHeight());
+                scroll.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight() * 3);
+                applicationBtn.setBounds(0,size.height - label.getHeight()*2,size.width, 2*label.getHeight());
             }
         });
     }
