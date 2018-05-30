@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         frame = new ProgramFrame(1200, 800);
-        frame.setResizable(false);
+//        frame.setResizable(false);
         frame.setVisible(true);
         frame.setComponentsParent();
     }

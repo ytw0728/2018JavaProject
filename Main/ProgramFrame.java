@@ -23,8 +23,6 @@ public class ProgramFrame extends JFrame{
 	private AttributePane 	AB;
 	private HashMap componentsMap = new HashMap();
 
-
-
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
 	}
@@ -73,8 +71,9 @@ public class ProgramFrame extends JFrame{
 		layout(MenuBar);
 		layout(ToolBar);
 		layout(split1);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		componentsMap.put("PF", this);
 		componentsMap.put("TE", TE);
 		componentsMap.put("MM", MM);
 		componentsMap.put("AB", AB);

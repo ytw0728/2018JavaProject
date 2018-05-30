@@ -6,16 +6,13 @@ import Configs.Colors.NodeColor;
 import Configs.Fonts.FontSwitch;
 import DataStructures.JSONNode;
 import Main.ProgramFrame;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicTreeUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.*;
-import java.awt.image.BufferStrategy;
 
 public class MindMapPane extends JPanel {
     ProgramFrame parent = null;
@@ -45,6 +42,7 @@ public class MindMapPane extends JPanel {
                 Dimension size = getSize();
                 label.setBounds(0,0,label.getWidth(), label.getHeight());
                 mindMap.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight());
+                mindMap.update();
             }
         });
     }
@@ -61,30 +59,33 @@ class MindMap extends JPanel{
 
     public MindMap(int x, int y, int width, int height) {
         setLayout(null);
-        JFrame frame = new JFrame();
-
         setBounds(x,y, width, height);
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
         setFont(FontSwitch.init(FontSwitch.NORMAL));
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK) , 1));
         setDoubleBuffered(true);
-
-
         setForeground(Color.WHITE);
         setVisible(true);
+
         this.addMouseListener(new MindMapMouseListener());
         this.addMouseMotionListener(new MindMapMouseMotionListener());
-
     }
     public void setHead(JSONNode head){ this.head = head; }
     public void printHead(){
         g = getGraphics();
         BufferImage = createImage(getWidth(), getHeight());
         g2d = (Graphics2D)BufferImage.getGraphics();
+
         g2d.setColor(ColorSwitch.init(ColorSwitch.DEEPDARK));
         g2d.fillRect(0,0, getWidth(), getHeight());
         initAllNodes(head,0, 0);
         g.drawImage(BufferImage,0,0,null);
+        timer.start();
+    }
+    public void update(){
+        g = getGraphics();
+        BufferImage = createImage(getWidth(), getHeight());
+        g2d = (Graphics2D)BufferImage.getGraphics();
     }
     @Override
     public void update(Graphics g ){
@@ -102,9 +103,11 @@ class MindMap extends JPanel{
             drawNodes(now.getChildren().get(i));
         }
     }
+
     private void draw(JSONNode now){
         if( now.getSelection() ) g2d.setColor(new NodeColor());
         else g2d.setColor(NodeColor.init(now.getLevel()));
+
         g2d.fillRoundRect(now.getX(),now.getY(),now.getWidth(),now.getHeight(), 10,10);
 
         if( now.getLevel() != 0 ) {
@@ -146,7 +149,7 @@ class MindMap extends JPanel{
     }
     private void initNode(JSONNode now, int level, int idx){
         Font font = g2d.getFont();
-        FontRenderContext context = ((Graphics2D)g2d).getFontRenderContext();
+        FontRenderContext context = g2d.getFontRenderContext();
         if( now.getX() == -1 ) {
             now.setLevel(level);
             now.setIdx(idx);
@@ -200,7 +203,9 @@ class MindMap extends JPanel{
 
     private boolean clicked = false;
     private JSONNode target = null;
+    private JSONNode editTarget = null;
     private boolean dragProcessing = false;
+    private long catchTime;
     Timer timer = new Timer(50, new ActionListener() {
         public void actionPerformed (ActionEvent e) {
             update(g);
@@ -220,7 +225,6 @@ class MindMap extends JPanel{
                 target.setArrowStart(target.getArrowStartX() - lastX + x, target.getArrowStartY() - lastY + y);
                 target.setContentX(target.getContentX() - lastX + x);
                 target.setContentY(target.getContentY() - lastY + y);
-
                 dragProcessing = false;
             }
         }
@@ -230,28 +234,31 @@ class MindMap extends JPanel{
             int x = e.getX();
             int y = e.getY();
             target = null;
+            if( editTarget != null ){
+                editTarget.setSelection(false);
+                editTarget = null;
+            }
             if( (target = JSONNode.findInXY(head,x, y)) != null ){
-                System.out.println(target.getData());
                 clicked = true;
                 target.setSelection(true);
-
-                timer.start();
+                catchTime = System.currentTimeMillis();
             }
         }
-
         public void mouseClicked(MouseEvent e){ }
         public void mouseReleased(MouseEvent e) {
             if( clicked ){
-                clicked = false;
-                target.setSelection(false);
-                target = null;
-                update(g);
-                timer.stop();
+                clicked=false;
+                if( System.currentTimeMillis() - catchTime <= 200) {
+                    editTarget = target;
+                    // statement
+                }
+                else {
+                    target.setSelection(false);
+                    target = null;
+                }
             }
         }
-
         public void mouseEntered(MouseEvent e) { }
-
         public void mouseExited(MouseEvent e) { }
     }
     private void drawLine(double x1,double y1, double x2, double y2){

@@ -19,6 +19,7 @@ import java.awt.event.ComponentEvent;
 
 public class TextEditorPane extends JPanel {
     ProgramFrame parent = null;
+    private TextEditor editor;
     public TextEditorPane(int x, int y, String str) {
         setLayout(null);
         setSize(x,y);
@@ -29,7 +30,7 @@ public class TextEditorPane extends JPanel {
         label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         add(label);
 
-        TextEditor editor = new TextEditor(0,0, x, y);
+        editor = new TextEditor(0,0, x, y);
         JScrollPane scroll = new JScrollPane(editor);
         scroll.setBounds(0,y/20,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));

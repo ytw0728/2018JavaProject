@@ -2,9 +2,11 @@ package Panels;
 
 import Components.BlueButton;
 import Components.DarkLabel;
+import Components.WhiteTextField;
 import Configs.Colors.ColorSwitch;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -36,7 +38,7 @@ public class AttributePane extends JPanel{
         add(applicationBtn);
 
 
-        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setBackground(new Color(47,51,61));
         setVisible(true);
 
@@ -55,11 +57,58 @@ public class AttributePane extends JPanel{
 
 class Attribute extends JPanel{
     public Attribute(int x, int y, int width, int height) {
+        setLayout(null);
         setBounds(x,y, width, height);
-        setBackground(new Color(47,51,61));
+        setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 10));
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setForeground(Color.WHITE);
+
+        // by KH
+        /*
+        DarkLabel label1 = new DarkLabel("TEXT : ");
+        label1.setSize(getWidth() / 3, getHeight() / 20);
+        label1.setLocation(30, 55);
+        label1.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 30));
+        add(label1);
+        */
+/*
+        WhiteTextField intext = new WhiteTextField();
+        intext.setSize(getWidth() / 3, getHeight() / 20);
+        intext.setLocation(160, 60);
+        intext.setOpaque(true);
+        add(intext);
+        */
+
+        DarkLabel[] labelArr = new DarkLabel[6];
+        labelArr[0]= new DarkLabel("TEXT");
+        labelArr[1] = new DarkLabel("X");
+        labelArr[2] = new DarkLabel("Y");
+        labelArr[3] = new DarkLabel("WIDTH");
+        labelArr[4] = new DarkLabel("HEIGHT");
+        labelArr[5] = new DarkLabel("COLOR");
+
+        WhiteTextField[] whitefield = new WhiteTextField[6];
+        for (int i = 0; i < 5; i++) {
+            labelArr[i].setSize(getWidth() / 4, getHeight() / 20);
+            labelArr[i].setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
+            labelArr[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            labelArr[i].setLocation(30,  50 + i * 90);
+            add(labelArr[i]);
+
+            whitefield[i] = new WhiteTextField(getHeight()/20);
+            whitefield[i].setSize(getWidth() / 3, getHeight() / 20);
+            whitefield[i].setBackground(ColorSwitch.init(ColorSwitch.BRIGHTTEST));
+            whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            whitefield[i].setCaretColor(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            whitefield[i].setLocation(160, 50 + 90 * i);
+            add(whitefield[i]);
+        }
         setVisible(true);
     }
+
 }
+
+
+
+
