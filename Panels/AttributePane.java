@@ -4,22 +4,23 @@ import Components.BlueButton;
 import Components.DarkLabel;
 import Components.WhiteTextField;
 import Configs.Colors.ColorSwitch;
+import Configs.Colors.NodeColor;
+import DataStructures.JSONNode;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AttributePane extends JPanel{
     JFrame parent = null;
+    private Attribute attr;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
-
         setBounds(0, 0, x, y);
-        setMinimumSize(new Dimension(x,y));
-        setPreferredSize(new Dimension(x,y) );
-        setMaximumSize(new Dimension(x,y));
+        setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
 
         DarkLabel label = new DarkLabel(str);
         label.setSize(getWidth(), getHeight()/20);
@@ -27,21 +28,22 @@ public class AttributePane extends JPanel{
         label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         add(label);
 
-        Attribute attr = new Attribute(0,y/20, x, y- y/20);
+        attr = new Attribute(0,0, x, y - y/20);
         JScrollPane scroll = new JScrollPane(attr);
-        scroll.setBounds(0,y/20,x,y - 3*y/20);
+        scroll.setLayout(new ScrollPaneLayout() );
+        scroll.getViewport().setBounds(0,y/20 ,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
         add(scroll);
+
 
         BlueButton applicationBtn = new BlueButton("∫Ø∞Ê«œ±‚");
         applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
         add(applicationBtn);
 
-
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
-        setBackground(new Color(47,51,61));
         setVisible(true);
-
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -51,46 +53,50 @@ public class AttributePane extends JPanel{
                 applicationBtn.setBounds(0,size.height - label.getHeight()*2,size.width, 2*label.getHeight());
             }
         });
+        applicationBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                attr.applyAttr();
+            }
+        });
     }
     public void setParent(JFrame frame){ parent = frame;}
+    public void showAP(){ attr.showAll(); }
+    public void hideAP(){ attr.hideAll(); }
+    public void setEditTarget(JSONNode target){
+        attr.setEditTarget(target);
+    }
 }
 
 class Attribute extends JPanel{
+    private JSONNode editTarget;
+    private DarkLabel[] labelArr;
+    private WhiteTextField[] whitefield;
     public Attribute(int x, int y, int width, int height) {
         setLayout(null);
-        setBounds(x,y, width, height);
+        setBounds(x,y,width, height);
+
+        setPreferredSize(new Dimension(100, 50 + 90 * 7));
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 10));
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setForeground(Color.WHITE);
 
         // by KH
-        /*
-        DarkLabel label1 = new DarkLabel("TEXT : ");
-        label1.setSize(getWidth() / 3, getHeight() / 20);
-        label1.setLocation(30, 55);
-        label1.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 30));
-        add(label1);
-        */
-/*
-        WhiteTextField intext = new WhiteTextField();
-        intext.setSize(getWidth() / 3, getHeight() / 20);
-        intext.setLocation(160, 60);
-        intext.setOpaque(true);
-        add(intext);
-        */
 
-        DarkLabel[] labelArr = new DarkLabel[6];
+        labelArr = new DarkLabel[7];
         labelArr[0]= new DarkLabel("TEXT");
         labelArr[1] = new DarkLabel("X");
         labelArr[2] = new DarkLabel("Y");
         labelArr[3] = new DarkLabel("WIDTH");
         labelArr[4] = new DarkLabel("HEIGHT");
         labelArr[5] = new DarkLabel("COLOR");
+        labelArr[6] = new DarkLabel("TEXT COLOR");
 
-        WhiteTextField[] whitefield = new WhiteTextField[6];
-        for (int i = 0; i < 5; i++) {
-            labelArr[i].setSize(getWidth() / 4, getHeight() / 20);
+        whitefield = new WhiteTextField[7];
+        for (int i = 0; i < 7; i++) {
+            labelArr[i].setSize(getWidth() / 3, getHeight() / 20);
             labelArr[i].setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
             labelArr[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             labelArr[i].setLocation(30,  50 + i * 90);
@@ -104,9 +110,77 @@ class Attribute extends JPanel{
             whitefield[i].setLocation(160, 50 + 90 * i);
             add(whitefield[i]);
         }
-        setVisible(true);
+
+        setVisible(false);
+    }
+    public void showAll(){ setVisible(true); }
+    public void hideAll(){
+        setVisible(false);
+    }
+    public void setEditTarget(JSONNode target){
+        this.editTarget = target;
+        if( target == null ) return;
+        whitefield[0].setText(target.getData()); // text
+        whitefield[1].setText(String.valueOf(target.getX()) ); // x
+        whitefield[2].setText(String.valueOf(target.getY())); // y
+        whitefield[3].setText(String.valueOf(target.getWidth())); // width
+        whitefield[4].setText(String.valueOf(target.getHeight())); // height
+        if( target.getColor().trim().equals("") ) {
+            String hexColour = Integer.toHexString(NodeColor.init(target.getLevel()).getRGB() & 0xffffff);
+            if (hexColour.length() < 6) {
+                hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
+            }
+            StringBuilder sb = new StringBuilder(hexColour);
+            sb.insert(0,'#');
+            whitefield[5].setText(sb.toString()); // color
+        }
+        else whitefield[5].setText(target.getColor()); // color
+
+        if( target.getColor().trim().equals("") ) {
+            String hexColour = Integer.toHexString(NodeColor.init(target.getLevel()).getRGB() & 0xffffff);
+            if (hexColour.length() < 6) {
+                hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
+            }
+            StringBuilder sb = new StringBuilder(hexColour);
+            sb.insert(0,'#');
+            whitefield[6].setText(sb.toString()); // color
+        }
+        else whitefield[6].setText(target.getTextColor()); // textColor
     }
 
+    public void applyAttr(){
+        String text, color, textColor; // text
+        if( editTarget != null ){
+            if( !(text = whitefield[0].getText().trim()).equals("")) editTarget.setData(text);
+            if( !(color = whitefield[5].getText().trim()).equals("")) editTarget.setColor(color);
+            if( !(textColor = whitefield[6].getText().trim()).equals("")) editTarget.setTextColor(textColor);
+            for( int i = 1; i <= 4; i++) {
+                if ( !whitefield[i].getText().trim().equals("") ) {
+                    try {
+                        int num = Integer.parseInt(whitefield[i].getText().trim()); // x
+                        switch(i){
+                            case 1:
+                                editTarget.setX(num);
+                                break;
+                            case 2:
+                                editTarget.setY(num);
+                                break;
+                            case 3:
+                                editTarget.setWidth(num);
+                                break;
+                            case 4:
+                                editTarget.setHeight(num);
+                                break;
+                            default:
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getStackTrace());
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 

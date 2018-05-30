@@ -2,6 +2,7 @@ package DataStructures;
 import Configs.Fonts.FontSwitch;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sun.glass.ui.Size;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,17 +19,22 @@ public class JSONNode {
     private int arrowEndX = 0, arrowEndY = 0;
     private int level = -1, idx = -1;
     private boolean selection = false;
+    private String color = "";
+    private String textColor = "";
+    private boolean changed = false;
+    private boolean xChanged = false;
+    private boolean yChanged = false;
 
     public JSONNode(String str){
         this.data = str;
         this.children = new ArrayList<JSONNode>();
         this.parent= null;
     }
-    public void setData(String data){this.data = data;}
-    public void setX(int x){this.x=x;}
-    public void setY(int y){this.y=y;}
-    public void setWidth(int width){this.width = width;}
-    public void setHeight(int height){this.height= height;}
+    public void setData(String data){this.data = data; changed = true;}
+    public void setX(int x){this.x=x; changed = true;}
+    public void setY(int y){this.y=y; changed = true;}
+    public void setWidth(int width){this.width = width; changed = true; xChanged = true;}
+    public void setHeight(int height){this.height= height; changed = true; yChanged = true;}
     public void setContentX(int x){this.contentX = x;}
     public void setContentY(int y){this.contentY= y;}
     public void setContentWidth(int width){this.contentWidth = width;}
@@ -38,11 +44,17 @@ public class JSONNode {
     public void setLevel(int level){this.level = level;}
     public void setIdx(int idx){this.idx = idx;}
     public void setSelection(boolean b){this.selection = b;}
+    public void setColor(String str){this.color= str; changed = true;}
+    public void setTextColor(String str){this.textColor=str; changed = true;}
+    public void setChanged(boolean t){this.changed = t;}
+    public void setXChanged(boolean t){this.xChanged = t;}
+    public void setYChanged(boolean t){this.yChanged = t;}
+
     public void setChildren(JSONNode newNode){
         if( children.size() < 4) children.add(newNode);
         else System.out.println("You can't add the child nodes more than 4.");
     }
-    public void setParent(JSONNode parent){this.parent = parent;}
+    public void setParent(JSONNode parent){this.parent = parent; changed = true;}
 
     public String getData(){return data;}
     public int getX(){return x;}
@@ -60,6 +72,11 @@ public class JSONNode {
     public int getLevel(){return level;}
     public int getIdx(){return idx;}
     public boolean getSelection(){return selection;}
+    public String getColor(){return color;}
+    public String getTextColor(){return textColor;}
+    public boolean getChanged(){return changed;}
+    public boolean getXChanged(){return xChanged ;}
+    public boolean getYChanged(){return yChanged ;}
 
     public List<JSONNode> getChildren(){return children;}
     public JSONNode getLastChild(){

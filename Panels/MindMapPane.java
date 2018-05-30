@@ -20,9 +20,6 @@ public class MindMapPane extends JPanel {
     public MindMapPane(int x, int y, String str) {
         setLayout(null);
         setBounds(0,0, x, y);
-        setMinimumSize(new Dimension(x,y));
-        setPreferredSize(new Dimension(x,y));
-        setMaximumSize(new Dimension(x,y));
 
         DarkLabel label = new DarkLabel(str);
         label.setBounds(0,0,150, y/20);
@@ -46,7 +43,10 @@ public class MindMapPane extends JPanel {
             }
         });
     }
-    public void setParent(ProgramFrame frame){ parent = frame;}
+    public void setParent(ProgramFrame frame){
+        parent = frame;
+        mindMap.setFrame(this.parent);
+    }
     public void setHead(JSONNode head){ mindMap.setHead(head); }
     public void printHead(){ mindMap.printHead();}
 }
@@ -56,12 +56,16 @@ class MindMap extends JPanel{
     private Graphics2D g2d;
     private Image BufferImage;
     private Graphics g;
+    private ProgramFrame frame = null;
+    private AttributePane AB;
 
     public MindMap(int x, int y, int width, int height) {
+
+        setFocusable(true);
+
         setLayout(null);
         setBounds(x,y, width, height);
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
-        setFont(FontSwitch.init(FontSwitch.NORMAL));
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK) , 1));
         setDoubleBuffered(true);
         setForeground(Color.WHITE);
@@ -69,9 +73,29 @@ class MindMap extends JPanel{
 
         this.addMouseListener(new MindMapMouseListener());
         this.addMouseMotionListener(new MindMapMouseMotionListener());
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if( e.getExtendedKeyCode() == KeyEvent.VK_ESCAPE ){
+                    if( target != null ) target.setSelection(false);
+                    if( editTarget != null ) target.setSelection(false);
+                    target = null;
+                    editTarget = null;
+                    AB.setEditTarget(editTarget);
+                    AB.hideAP();
+                }
+            }
+        });
+    }
+
+    public void setFrame(ProgramFrame frame){
+        this.frame = frame;
+        AB = (AttributePane)frame.getComponentsMap().get("AB");
     }
     public void setHead(JSONNode head){ this.head = head; }
     public void printHead(){
+        requestFocusInWindow();
         g = getGraphics();
         BufferImage = createImage(getWidth(), getHeight());
         g2d = (Graphics2D)BufferImage.getGraphics();
@@ -97,7 +121,7 @@ class MindMap extends JPanel{
 
     private void drawNodes(JSONNode now){
         if( now == null ) return;
-
+        if( now.getChanged() ) reInitNode(now);
         draw(now);
         for( int i = 0; i < now.getChildren().size(); i++){
             drawNodes(now.getChildren().get(i));
@@ -106,6 +130,7 @@ class MindMap extends JPanel{
 
     private void draw(JSONNode now){
         if( now.getSelection() ) g2d.setColor(new NodeColor());
+        else if( !now.getColor().trim().equals("")) g2d.setColor( Color.decode(now.getColor().trim()) );
         else g2d.setColor(NodeColor.init(now.getLevel()));
 
         g2d.fillRoundRect(now.getX(),now.getY(),now.getWidth(),now.getHeight(), 10,10);
@@ -135,12 +160,31 @@ class MindMap extends JPanel{
             drawLine(now.getArrowStartX(), now.getArrowStartY(), now.getArrowEndX(), now.getArrowEndY());
         }
         if( now.getSelection() ) g2d.setColor(Color.WHITE);
+        else if( !now.getTextColor().trim().equals("")) g2d.setColor(Color.decode(now.getTextColor().trim()));
         else g2d.setColor(Color.BLACK);
         g2d.drawString(now.getData(),now.getContentX(), now.getContentY());
     }
-    private void initAllNodes(JSONNode now, int level, int idx){
-        if( now == null ) return;
 
+    private void reInitNode(JSONNode now){
+        Font font = g2d.getFont();
+        FontRenderContext context = g2d.getFontRenderContext();
+        now.setContentWidth((int) font.getStringBounds(now.getData(), context).getWidth());
+        LineMetrics ln = font.getLineMetrics(now.getData(), context);
+        now.setContentHeight((int) (ln.getAscent() + ln.getDescent()));
+
+        if( !now.getXChanged() ) now.setWidth(now.getContentWidth()+ 20);
+        if( !now.getYChanged() ) now.setHeight(now.getContentHeight()+ 10);
+
+        now.setContentX(now.getX() + (now.getWidth() - now.getContentWidth()) / 2);
+        now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
+
+        now.setChanged(false);
+        now.setXChanged(false);
+        now.setYChanged(false);
+    }
+    private void initAllNodes(JSONNode now, int level, int idx){
+        g2d.setFont(FontSwitch.init(FontSwitch.BOLD));
+        if( now == null ) return;
         initNode(now,level,idx);
         draw(now);
         for( int i = 0; i < now.getChildren().size(); i++){
@@ -199,67 +243,7 @@ class MindMap extends JPanel{
             now.setContentX(now.getX() + (now.getWidth() - now.getContentWidth()) / 2);
             now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
         }
-    }
-
-    private boolean clicked = false;
-    private JSONNode target = null;
-    private JSONNode editTarget = null;
-    private boolean dragProcessing = false;
-    private long catchTime;
-    Timer timer = new Timer(50, new ActionListener() {
-        public void actionPerformed (ActionEvent e) {
-            update(g);
-        }
-    });
-    private class MindMapMouseMotionListener implements  MouseMotionListener {
-        public void mouseMoved(MouseEvent e){ }
-        public void mouseDragged(MouseEvent e){
-            if( clicked && !dragProcessing){
-                dragProcessing = true;
-                int x = e.getX(); int y = e.getY();
-                int lastX = target.getX(); int lastY = target.getY();
-                x -= target.getWidth()/2;
-                y -= target.getHeight()/2;
-                target.setX(x);
-                target.setY(y);
-                target.setArrowStart(target.getArrowStartX() - lastX + x, target.getArrowStartY() - lastY + y);
-                target.setContentX(target.getContentX() - lastX + x);
-                target.setContentY(target.getContentY() - lastY + y);
-                dragProcessing = false;
-            }
-        }
-    }
-    private class MindMapMouseListener implements MouseListener{
-        public void mousePressed(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-            target = null;
-            if( editTarget != null ){
-                editTarget.setSelection(false);
-                editTarget = null;
-            }
-            if( (target = JSONNode.findInXY(head,x, y)) != null ){
-                clicked = true;
-                target.setSelection(true);
-                catchTime = System.currentTimeMillis();
-            }
-        }
-        public void mouseClicked(MouseEvent e){ }
-        public void mouseReleased(MouseEvent e) {
-            if( clicked ){
-                clicked=false;
-                if( System.currentTimeMillis() - catchTime <= 200) {
-                    editTarget = target;
-                    // statement
-                }
-                else {
-                    target.setSelection(false);
-                    target = null;
-                }
-            }
-        }
-        public void mouseEntered(MouseEvent e) { }
-        public void mouseExited(MouseEvent e) { }
+        now.setChanged(false);
     }
     private void drawLine(double x1,double y1, double x2, double y2){
         double cx = x1, cy = y1;
@@ -306,4 +290,78 @@ class MindMap extends JPanel{
         arrowHead.closePath();
         return arrowHead;
     }
+
+
+
+    private boolean clicked = false;
+    private JSONNode target = null;
+    private JSONNode editTarget = null;
+    private boolean dragProcessing = false;
+    private long catchTime;
+    Timer timer = new Timer(50, new ActionListener() {
+        public void actionPerformed (ActionEvent e) {
+            update(g);
+        }
+    });
+    private class MindMapMouseMotionListener implements  MouseMotionListener {
+        public void mouseMoved(MouseEvent e){ }
+        public void mouseDragged(MouseEvent e){
+            if( clicked && !dragProcessing){
+                dragProcessing = true;
+                int x = e.getX(); int y = e.getY();
+                int lastX = target.getX(); int lastY = target.getY();
+                x -= target.getWidth()/2;
+                y -= target.getHeight()/2;
+                target.setX(x);
+                target.setY(y);
+                target.setArrowStart(target.getArrowStartX() - lastX + x, target.getArrowStartY() - lastY + y);
+                target.setContentX(target.getContentX() - lastX + x);
+                target.setContentY(target.getContentY() - lastY + y);
+                dragProcessing = false;
+            }
+        }
+    }
+    private class MindMapMouseListener implements MouseListener{
+        public void mousePressed(MouseEvent e) {
+            int x = e.getX();
+            int y = e.getY();
+            target = null;
+            if( (target = JSONNode.findInXY(head,x, y)) != null ){
+                clicked = true;
+                target.setSelection(true);
+                catchTime = System.currentTimeMillis();
+            }
+            if( editTarget != null && target != editTarget){
+                editTarget.setSelection(false);
+                editTarget = null;
+                AB.setEditTarget(editTarget);
+                AB.hideAP();
+            }
+        }
+        public void mouseClicked(MouseEvent e){ }
+        public void mouseReleased(MouseEvent e) {
+            if( clicked ){
+                clicked=false;
+                if( System.currentTimeMillis() - catchTime <= 200) {
+                    editTarget = target;
+                    AB.showAP();
+                    AB.setEditTarget(editTarget);
+                }
+                else {
+                    if( target == null ) {
+                        AB.hideAP();
+                    }
+                    else{
+                        editTarget = target;
+                        target.setSelection(true);
+                        AB.showAP();
+                        AB.setEditTarget(editTarget);
+                    }
+                }
+            }
+        }
+        public void mouseEntered(MouseEvent e) { }
+        public void mouseExited(MouseEvent e) { }
+    }
+
 }

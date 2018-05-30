@@ -34,6 +34,7 @@ public class TextEditorPane extends JPanel {
         JScrollPane scroll = new JScrollPane(editor);
         scroll.setBounds(0,y/20,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("적용하기");

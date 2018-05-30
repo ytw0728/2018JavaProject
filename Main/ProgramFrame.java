@@ -8,6 +8,8 @@ import UtilBars.MenuBar;
 import UtilBars.ToolBar;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class ProgramFrame extends JFrame{
 	private MindMapPane 	MM;
 	private AttributePane 	AB;
 	private HashMap componentsMap = new HashMap();
+	private JSplitPane split1, split2;
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -41,8 +44,8 @@ public class ProgramFrame extends JFrame{
 		MenuBar = new MenuBar(0, 0, width, CompHeight);
 		ToolBar = new ToolBar(0, CompHeight, width, CompHeight);
 
-		JSplitPane split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		JSplitPane split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		split1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
 		TE = new TextEditorPane(width / 4, CompHeight * 20, "Text Editor Pane");
 		MM = new MindMapPane(width / 2, CompHeight * 20, "Mind Map Pane");
@@ -94,7 +97,6 @@ public class ProgramFrame extends JFrame{
 				split2.setDividerLocation(split2.getWidth() - AB.getWidth());
 			}
 		});
-
 	}
 	private void layout( JComponent comp) {
 		add(comp);
