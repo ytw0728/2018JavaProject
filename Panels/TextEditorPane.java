@@ -5,7 +5,7 @@ import Components.DarkLabel;
 
 import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
-import DataStructures.CompactTree;
+import DataStructures.CompactNode;
 import DataStructures.JSONNode;
 
 import Main.ProgramFrame;
@@ -65,10 +65,7 @@ public class TextEditorPane extends JPanel {
                     for( int i = 0 ; i< subData.length;i++ ){
                         if(!subData[i].equals("")){
                             head = JSONNode.addJSON(head,subData[i],i);
-                            if( head == null ){
-                                parent.compInit();
-                                return;
-                            }
+                            if( head == null ) return;
                             break;
                         }
                     }
@@ -77,7 +74,8 @@ public class TextEditorPane extends JPanel {
                 MindMapPane m = (MindMapPane)parent.getComponentsMap().get("MM");
                 m.setHead(head);
                 m.printHead();
-                CompactTree ct = new CompactTree(head);
+
+                CompactNode ct = CompactNode.makeTree(head); // for changing to json
                 parent.setRootJson(gson.toJson(ct));
             }
         });

@@ -1,6 +1,8 @@
 package Main;
 
 import Configs.Colors.ColorSwitch;
+import DataStructures.CompactNode;
+import DataStructures.JSONNode;
 import Panels.AttributePane;
 import Panels.MindMapPane;
 import Panels.TextEditorPane;
@@ -26,6 +28,7 @@ public class ProgramFrame extends JFrame{
 	private JSplitPane split1, split2;
 	private String rootJson = "";
 	private boolean modified = false;
+	private Gson gson = new Gson();
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -113,11 +116,25 @@ public class ProgramFrame extends JFrame{
 		TE.setParent(this);
 	}
 
-	public void compInit(){
+	public void clearAll(){
 		this.rootJson = "";
 		this.modified = false;
 		TE.clearText();
 		MM.clear();
 		AB.clear();
+	}
+	public void setWithJSON(String json){
+		clearAll();
+		JSONNode head = getInJSONNode(json);
+
+		MM.setHead(head);
+		MM.printHead();
+
+		rootJson = json;
+	}
+	public JSONNode getInJSONNode(String json){
+		CompactNode node = gson.fromJson(json, CompactNode.class );
+		JSONNode head = node.convertToJSONNode();
+		return head;
 	}
 }

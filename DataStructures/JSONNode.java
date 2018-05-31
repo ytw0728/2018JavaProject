@@ -98,13 +98,15 @@ public class JSONNode {
 
     public static JSONNode addJSON(JSONNode head, String str, int idx /* is level of node*/ ){
         JSONNode now = head;
+        JSONNode tmp = new JSONNode(str);
+
+        tmp.setIdx(idx);
         if( now == null ){
             if( idx == 0 ){
-                JSONNode tmp = new JSONNode(str);
+                tmp.setParent(null);
                 head = tmp;
             }
             else{
-
                 JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
@@ -118,7 +120,6 @@ public class JSONNode {
             JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        JSONNode tmp = new JSONNode(str);
         tmp.setParent(now);
         now.setChildren(tmp);
         return head;

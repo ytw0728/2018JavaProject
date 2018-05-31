@@ -161,12 +161,12 @@ class MindMap extends JPanel{
                     now.setArrowEnd(parX + parWidth / 2, parY + parHeight); // го
                     break;
             }
-
             drawLine(now.getArrowStartX(), now.getArrowStartY(), now.getArrowEndX(), now.getArrowEndY());
         }
         if( now.getSelection() ) g2d.setColor(Color.WHITE);
         else if( !now.getTextColor().trim().equals("")) g2d.setColor(Color.decode(now.getTextColor().trim()));
         else g2d.setColor(Color.BLACK);
+
         g2d.drawString(now.getData(),now.getContentX(), now.getContentY());
     }
 
@@ -180,7 +180,6 @@ class MindMap extends JPanel{
 //        if( now.getDataChanged() ) {
         if (!now.getWidthChanged()) now.setWidth(now.getContentWidth() + 20);
         if (!now.getHeightChanged()) now.setHeight(now.getContentHeight() + 10);
-
 
         now.setContentX(now.getX() + (now.getWidth() - now.getContentWidth()) / 2);
         now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
