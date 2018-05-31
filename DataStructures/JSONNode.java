@@ -19,9 +19,6 @@ public class JSONNode {
     private boolean heightChanged = false;
     private boolean dataChanged = false;
 
-    public static void toJson(JSONNode now){
-
-    }
     public JSONNode(String str){
         this.data = str;
         this.children = new ArrayList<JSONNode>();
@@ -83,7 +80,6 @@ public class JSONNode {
             return children.get(children.size()-1);
         return null;
     }
-    public boolean hasChild(){ return children.size() != 0;}
     public JSONNode getParent(){return parent;}
     public static JSONNode findInXY(JSONNode node, int x, int y){
         if( node == null ) return null;
@@ -99,21 +95,24 @@ public class JSONNode {
         return tmp;
     }
 
-    public static JSONNode addJSON(JSONNode head, String str, int idx){
+    public static JSONNode addJSON(JSONNode head, String str, int idx /* is level of node*/ ){
         JSONNode now = head;
         if( now == null ){
             if( idx == 0 ){
                 JSONNode tmp = new JSONNode(str);
                 head = tmp;
             }
+            else{
+                System.out.println("head is null. from JSONNode.java");
+            }
             return head;
         }
-        while( idx > 1 && now.getChildren() !=null  ){
+        while( idx > 1 && now.getChildren() != null  && now.getChildren().size() > 0 ){
             now = now.getLastChild();
             idx--;
         }
-        if( idx > 1 ){
-            System.out.println("The error is detected in addJSON of JSON class.");
+        if( idx != 1 ){
+            System.out.println("The error is detected in addJSON of JSON class. from JSONNode.java");
             return head;
         }
         JSONNode tmp = new JSONNode(str);
