@@ -5,6 +5,7 @@ import Components.DarkLabel;
 
 import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
+import DataStructures.CompactTree;
 import DataStructures.JSONNode;
 
 import Main.ProgramFrame;
@@ -69,10 +70,11 @@ public class TextEditorPane extends JPanel {
                     }
                 }
                 Gson gson = new Gson();
-//                System.out.println(gson.toJson(head));
                 MindMapPane m = (MindMapPane)parent.getComponentsMap().get("MM");
                 m.setHead(head);
                 m.printHead();
+                CompactTree ct = new CompactTree(head);
+                parent.setRootJson(gson.toJson(ct));
             }
 
         });

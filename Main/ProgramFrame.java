@@ -6,6 +6,7 @@ import Panels.MindMapPane;
 import Panels.TextEditorPane;
 import UtilBars.MenuBar;
 import UtilBars.ToolBar;
+import com.google.gson.Gson;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,7 @@ public class ProgramFrame extends JFrame{
 	private AttributePane 	AB;
 	private HashMap componentsMap = new HashMap();
 	private JSplitPane split1, split2;
+	private String rootJson = "";
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -102,6 +104,7 @@ public class ProgramFrame extends JFrame{
 		add(comp);
 	}
 	public HashMap getComponentsMap(){return componentsMap;}
+	public void setRootJson(String json){ this.rootJson = json; }
 	public void setComponentsParent(){
 		MenuBar.setParent(this);
 		ToolBar.setParent(this);

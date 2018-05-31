@@ -64,6 +64,7 @@ public class AttributePane extends JPanel{
     public void setParent(JFrame frame){ parent = frame;}
     public void showAP(){ attr.showAll(); }
     public void hideAP(){ attr.hideAll(); }
+    public void setText(){ attr.setText(); }
     public void setEditTarget(JSONNode target){
         attr.setEditTarget(target);
     }
@@ -117,16 +118,15 @@ class Attribute extends JPanel{
     public void hideAll(){
         setVisible(false);
     }
-    public void setEditTarget(JSONNode target){
-        this.editTarget = target;
-        if( target == null ) return;
-        whitefield[0].setText(target.getData()); // text
-        whitefield[1].setText(String.valueOf(target.getX()) ); // x
-        whitefield[2].setText(String.valueOf(target.getY())); // y
-        whitefield[3].setText(String.valueOf(target.getWidth())); // width
-        whitefield[4].setText(String.valueOf(target.getHeight())); // height
-        if( target.getColor().trim().equals("") ) {
-            String hexColour = Integer.toHexString(NodeColor.init(target.getLevel()).getRGB() & 0xffffff);
+    public void setText(){
+        if( editTarget == null ) return;
+        whitefield[0].setText(editTarget.getData()); // text
+        whitefield[1].setText(String.valueOf(editTarget.getX()) ); // x
+        whitefield[2].setText(String.valueOf(editTarget.getY())); // y
+        whitefield[3].setText(String.valueOf(editTarget.getWidth())); // width
+        whitefield[4].setText(String.valueOf(editTarget.getHeight())); // height
+        if( editTarget.getColor().trim().equals("") ) {
+            String hexColour = Integer.toHexString(NodeColor.init(editTarget.getLevel()).getRGB() & 0xffffff);
             if (hexColour.length() < 6) {
                 hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
             }
@@ -134,10 +134,10 @@ class Attribute extends JPanel{
             sb.insert(0,'#');
             whitefield[5].setText(sb.toString()); // color
         }
-        else whitefield[5].setText(target.getColor()); // color
+        else whitefield[5].setText(editTarget.getColor()); // color
 
-        if( target.getColor().trim().equals("") ) {
-            String hexColour = Integer.toHexString(NodeColor.init(target.getLevel()).getRGB() & 0xffffff);
+        if( editTarget.getColor().trim().equals("") ) {
+            String hexColour = Integer.toHexString(NodeColor.init(editTarget.getLevel()).getRGB() & 0xffffff);
             if (hexColour.length() < 6) {
                 hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
             }
@@ -145,7 +145,11 @@ class Attribute extends JPanel{
             sb.insert(0,'#');
             whitefield[6].setText(sb.toString()); // color
         }
-        else whitefield[6].setText(target.getTextColor()); // textColor
+        else whitefield[6].setText(editTarget.getTextColor()); // textColor
+    }
+    public void setEditTarget(JSONNode target){
+        this.editTarget = target;
+        setText();
     }
 
     public void applyAttr(){

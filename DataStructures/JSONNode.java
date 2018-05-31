@@ -1,11 +1,4 @@
 package DataStructures;
-import Configs.Fonts.FontSwitch;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.sun.glass.ui.Size;
-
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,19 +15,23 @@ public class JSONNode {
     private String color = "";
     private String textColor = "";
     private boolean changed = false;
-    private boolean xChanged = false;
-    private boolean yChanged = false;
+    private boolean widthChanged = false;
+    private boolean heightChanged = false;
+    private boolean dataChanged = false;
 
+    public static void toJson(JSONNode now){
+
+    }
     public JSONNode(String str){
         this.data = str;
         this.children = new ArrayList<JSONNode>();
         this.parent= null;
     }
-    public void setData(String data){this.data = data; changed = true;}
-    public void setX(int x){this.x=x; changed = true;}
-    public void setY(int y){this.y=y; changed = true;}
-    public void setWidth(int width){this.width = width; changed = true; xChanged = true;}
-    public void setHeight(int height){this.height= height; changed = true; yChanged = true;}
+    public void setData(String data){ if( this.data != data){ this.data = data; changed = true; dataChanged = true; }}
+    public void setX(int x){if( this.x != x ){ this.x=x; changed = true;}}
+    public void setY(int y){if(this.y != y){this.y=y; changed = true;}}
+    public void setWidth(int width){if(this.width != width){ this.width = width; changed = true; widthChanged = true; }}
+    public void setHeight(int height){if(this.height != height){ this.height= height; changed = true; heightChanged = true; }}
     public void setContentX(int x){this.contentX = x;}
     public void setContentY(int y){this.contentY= y;}
     public void setContentWidth(int width){this.contentWidth = width;}
@@ -44,11 +41,12 @@ public class JSONNode {
     public void setLevel(int level){this.level = level;}
     public void setIdx(int idx){this.idx = idx;}
     public void setSelection(boolean b){this.selection = b;}
-    public void setColor(String str){this.color= str; changed = true;}
-    public void setTextColor(String str){this.textColor=str; changed = true;}
+    public void setColor(String str){if(this.color != str){this.color= str; changed = true;}}
+    public void setTextColor(String str){if(this.textColor != str){this.textColor=str; changed = true;}}
     public void setChanged(boolean t){this.changed = t;}
-    public void setXChanged(boolean t){this.xChanged = t;}
-    public void setYChanged(boolean t){this.yChanged = t;}
+    public void setWidthChanged(boolean t){this.widthChanged = t;}
+    public void setHeightChanged(boolean t){this.heightChanged = t;}
+    public void setDataChanged(boolean t){this.dataChanged = t;}
 
     public void setChildren(JSONNode newNode){
         if( children.size() < 4) children.add(newNode);
@@ -75,8 +73,9 @@ public class JSONNode {
     public String getColor(){return color;}
     public String getTextColor(){return textColor;}
     public boolean getChanged(){return changed;}
-    public boolean getXChanged(){return xChanged ;}
-    public boolean getYChanged(){return yChanged ;}
+    public boolean getWidthChanged(){return widthChanged ;}
+    public boolean getHeightChanged(){return heightChanged ;}
+    public boolean getDataChanged(){return dataChanged;}
 
     public List<JSONNode> getChildren(){return children;}
     public JSONNode getLastChild(){

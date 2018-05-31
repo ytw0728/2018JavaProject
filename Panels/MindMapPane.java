@@ -172,15 +172,18 @@ class MindMap extends JPanel{
         LineMetrics ln = font.getLineMetrics(now.getData(), context);
         now.setContentHeight((int) (ln.getAscent() + ln.getDescent()));
 
-        if( !now.getXChanged() ) now.setWidth(now.getContentWidth()+ 20);
-        if( !now.getYChanged() ) now.setHeight(now.getContentHeight()+ 10);
+        if( now.getDataChanged() ) {
+            if (!now.getWidthChanged()) now.setWidth(now.getContentWidth() + 20);
+            if (!now.getHeightChanged()) now.setHeight(now.getContentHeight() + 10);
+            }
+
 
         now.setContentX(now.getX() + (now.getWidth() - now.getContentWidth()) / 2);
         now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
 
         now.setChanged(false);
-        now.setXChanged(false);
-        now.setYChanged(false);
+        now.setDataChanged(false);
+        if( now.getSelection() ) AB.setText();
     }
     private void initAllNodes(JSONNode now, int level, int idx){
         g2d.setFont(FontSwitch.init(FontSwitch.BOLD));
@@ -244,6 +247,9 @@ class MindMap extends JPanel{
             now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
         }
         now.setChanged(false);
+        now.setDataChanged(false);
+        now.setWidthChanged(false);
+        now.setHeightChanged(false);
     }
     private void drawLine(double x1,double y1, double x2, double y2){
         double cx = x1, cy = y1;
