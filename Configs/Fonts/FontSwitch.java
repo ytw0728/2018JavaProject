@@ -7,13 +7,13 @@ public class FontSwitch extends Font {
     public static FontSwitch init(int option){
         switch(option){
             case EDITOR:
-                return new FontSwitch("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 20);
+                return new FontSwitch("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 20);
             case LABELTEXT:
-                return new FontSwitch("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 16);
+                return new FontSwitch("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 16);
             case SMALL :
-                return new FontSwitch("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 10);
+                return new FontSwitch("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 10);
             case BOLD :
-                return new FontSwitch("ÎßëÏùÄ Í≥†Îîï", Font.BOLD, 16);
+                return new FontSwitch("∏º¿∫ ∞ÌµÒ", Font.BOLD, 16);
             case MENUBAR :
             case NORMAL :
             default :
@@ -21,7 +21,7 @@ public class FontSwitch extends Font {
         }
     }
     public FontSwitch(){
-        super("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 13);
+        super("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 13);
     }
     private FontSwitch(String attr, int type, int size){
         super(attr, type, size);

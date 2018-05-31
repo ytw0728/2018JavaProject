@@ -139,21 +139,21 @@ class MindMap extends JPanel{
             JSONNode parent = now.getParent();
             int parX = parent.getX(), parY = parent.getY(), parHeight = parent.getHeight(), parWidth = parent.getWidth();
             switch (now.getIdx()) {
-                case 0: // 2ÏÇ¨Î∂ÑÎ©¥;
-                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY() + now.getHeight());// Ìïò
-                    now.setArrowEnd(parX, parY + parHeight / 2); // Ï¢å
+                case 0: // 2ªÁ∫–∏È;
+                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY() + now.getHeight());// «œ
+                    now.setArrowEnd(parX, parY + parHeight / 2); // ¡¬
                     break;
-                case 1: // 1ÏÇ¨Î∂ÑÎ©¥
-                    now.setArrowStart(now.getX(), now.getY() + now.getHeight() / 2); // Ï¢å
-                    now.setArrowEnd(parX + parWidth / 2, parY); // ÏÉÅ
+                case 1: // 1ªÁ∫–∏È
+                    now.setArrowStart(now.getX(), now.getY() + now.getHeight() / 2); // ¡¬
+                    now.setArrowEnd(parX + parWidth / 2, parY); // ªÛ
                     break;
-                case 2: // 4ÏÇ¨Î∂ÑÎ©¥
-                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY()); // ÏÉÅ
-                    now.setArrowEnd(parX + parWidth, parY + parHeight / 2); // Ïö∞
+                case 2: // 4ªÁ∫–∏È
+                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY()); // ªÛ
+                    now.setArrowEnd(parX + parWidth, parY + parHeight / 2); // øÏ
                     break;
-                case 3: // 3ÏÇ¨Î∂ÑÎ©¥
-                    now.setArrowStart(now.getX() + now.getWidth(), now.getY() + now.getHeight() / 2); // Ïö∞
-                    now.setArrowEnd(parX + parWidth / 2, parY + parHeight); // Ìïò
+                case 3: // 3ªÁ∫–∏È
+                    now.setArrowStart(now.getX() + now.getWidth(), now.getY() + now.getHeight() / 2); // øÏ
+                    now.setArrowEnd(parX + parWidth / 2, parY + parHeight); // «œ
                     break;
             }
 
@@ -223,20 +223,20 @@ class MindMap extends JPanel{
                     margin *= 2;
                 }
                 switch(idx){
-                    case 0: // 2ÏÇ¨Î∂ÑÎ©¥
+                    case 0: // 2ªÁ∫–∏È
                         now.setX(parX - margin - now.getWidth()/2);
                         now.setY(parY - margin - now.getHeight()/2);
 
                         break;
-                    case 1: // 1ÏÇ¨Î∂ÑÎ©¥
+                    case 1: // 1ªÁ∫–∏È
                         now.setX(parX + parWidth  + margin- now.getWidth()/2);
                         now.setY(parY - margin- now.getHeight()/2);
                         break;
-                    case 2: // 4ÏÇ¨Î∂ÑÎ©¥
+                    case 2: // 4ªÁ∫–∏È
                         now.setX(parX + parWidth + margin- now.getWidth()/2);
                         now.setY(parY + parHeight + margin- now.getHeight()/2);
                         break;
-                    case 3: // 3ÏÇ¨Î∂ÑÎ©¥
+                    case 3: // 3ªÁ∫–∏È
                         now.setX(parX - margin- now.getWidth()/2);
                         now.setY(parY + parHeight + margin- now.getHeight()/2);
                         break;

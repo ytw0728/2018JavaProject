@@ -1,8 +1,5 @@
 package Main;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Main {
     public static int[] defaultSize = {600, 400, 100, 100};
     private static ProgramFrame frame;
