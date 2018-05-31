@@ -112,4 +112,12 @@ public class ProgramFrame extends JFrame{
 		AB.setParent(this);
 		TE.setParent(this);
 	}
+
+	public void compInit(){
+		this.rootJson = "";
+		this.modified = false;
+		TE.clearText();
+		MM.clear();
+		AB.clear();
+	}
 }

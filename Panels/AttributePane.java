@@ -69,6 +69,8 @@ public class AttributePane extends JPanel{
     public void setEditTarget(JSONNode target){
         attr.setEditTarget(target);
     }
+
+    public void clear(){ attr.clear();}
 }
 
 class Attribute extends JPanel{
@@ -77,6 +79,13 @@ class Attribute extends JPanel{
     private WhiteTextField[] whitefield;
     private ProgramFrame frame = null;
 
+    public void clear(){
+        editTarget = null;
+        for(WhiteTextField f : whitefield ){
+            f.setText("");
+        }
+        setVisible(false);
+    }
     public Attribute(int x, int y, int width, int height) {
         setLayout(null);
         setBounds(x,y,width, height);
@@ -107,6 +116,10 @@ class Attribute extends JPanel{
             add(labelArr[i]);
 
             whitefield[i] = new WhiteTextField(getHeight()/20);
+            if( i == 0 ){
+                whitefield[i].setEditable(false);
+                whitefield[i].setEnabled(false);
+            }
             whitefield[i].setSize(getWidth() / 3, getHeight() / 20);
             whitefield[i].setBackground(ColorSwitch.init(ColorSwitch.BRIGHTTEST));
             whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
@@ -140,7 +153,7 @@ class Attribute extends JPanel{
         else whitefield[5].setText(editTarget.getColor()); // color
 
         if( editTarget.getColor().trim().equals("") ) {
-            String hexColour = Integer.toHexString(NodeColor.init(editTarget.getLevel()).getRGB() & 0xffffff);
+            String hexColour = Integer.toHexString(Color.BLACK.getRGB() & 0xffffff);
             if (hexColour.length() < 6) {
                 hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
             }
@@ -159,10 +172,10 @@ class Attribute extends JPanel{
         String text, color, textColor; // text
         if( editTarget != null ){
             boolean isChanged = false;
-            if( !(text = whitefield[0].getText().trim()).equals("")){
-                editTarget.setData(text);
-                isChanged =true;
-            }
+//            if( !(text = whitefield[0].getText().trim()).equals("")){
+//                editTarget.setData(text);
+//                isChanged =true;
+//            }
             if( !(color = whitefield[5].getText().trim()).equals("")){
                 editTarget.setColor(color);
                 isChanged =true;

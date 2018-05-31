@@ -18,14 +18,14 @@ public class JSONNode {
     private boolean changed = false;
     private boolean widthChanged = false;
     private boolean heightChanged = false;
-    private boolean dataChanged = false;
+//    private boolean dataChanged = false;
 
     public JSONNode(String str){
         this.data = str;
         this.children = new ArrayList<JSONNode>();
         this.parent= null;
     }
-    public void setData(String data){ if( this.data != data){ this.data = data; changed = true; dataChanged = true; }}
+//    public void setData(String data){ if( this.data != data){ this.data = data; changed = true; dataChanged = true; }}
     public void setX(int x){if( this.x != x ){ this.x=x; changed = true;}}
     public void setY(int y){if(this.y != y){this.y=y; changed = true;}}
     public void setWidth(int width){if(this.width != width){ this.width = width; changed = true; widthChanged = true; }}
@@ -44,7 +44,7 @@ public class JSONNode {
     public void setChanged(boolean t){this.changed = t;}
     public void setWidthChanged(boolean t){this.widthChanged = t;}
     public void setHeightChanged(boolean t){this.heightChanged = t;}
-    public void setDataChanged(boolean t){this.dataChanged = t;}
+//    public void setDataChanged(boolean t){this.dataChanged = t;}
 
     public void setChildren(JSONNode newNode){
         if( children.size() < 4) children.add(newNode);
@@ -73,7 +73,7 @@ public class JSONNode {
     public boolean getChanged(){return changed;}
     public boolean getWidthChanged(){return widthChanged ;}
     public boolean getHeightChanged(){return heightChanged ;}
-    public boolean getDataChanged(){return dataChanged;}
+//    public boolean getDataChanged(){return dataChanged;}
 
     public List<JSONNode> getChildren(){return children;}
     public JSONNode getLastChild(){

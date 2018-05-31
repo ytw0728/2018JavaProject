@@ -65,7 +65,10 @@ public class TextEditorPane extends JPanel {
                     for( int i = 0 ; i< subData.length;i++ ){
                         if(!subData[i].equals("")){
                             head = JSONNode.addJSON(head,subData[i],i);
-                            if( head == null ) return;
+                            if( head == null ){
+                                parent.compInit();
+                                return;
+                            }
                             break;
                         }
                     }
@@ -80,6 +83,7 @@ public class TextEditorPane extends JPanel {
         });
     }
     public void setParent(ProgramFrame frame){ parent = frame;}
+    public void clearText(){ editor.clearText(); }
 }
 
 class TextEditor extends JTextArea {
@@ -95,5 +99,8 @@ class TextEditor extends JTextArea {
         setBorder(BorderFactory.createLineBorder ( ColorSwitch.init(ColorSwitch.BRIGHT), 1));
         setForeground(Color.WHITE);
         setVisible(true);
+    }
+    public void clearText(){
+        setText(null);
     }
 }

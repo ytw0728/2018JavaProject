@@ -49,6 +49,7 @@ public class MindMapPane extends JPanel {
     }
     public void setHead(JSONNode head){ mindMap.setHead(head); }
     public void printHead(){ mindMap.printHead();}
+    public void clear(){mindMap.clear();}
 }
 
 class MindMap extends JPanel{
@@ -58,11 +59,15 @@ class MindMap extends JPanel{
     private Graphics g;
     private ProgramFrame frame = null;
     private AttributePane AB;
-
+    public void clear(){
+        timer.stop();
+        head = null;
+        g2d.setColor(ColorSwitch.init(ColorSwitch.DARK));
+        g2d.fillRect(0,0,getWidth(),getHeight());
+        g.drawImage(BufferImage,0,0,null);
+    }
     public MindMap(int x, int y, int width, int height) {
-
         setFocusable(true);
-
         setLayout(null);
         setBounds(x,y, width, height);
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
@@ -88,13 +93,13 @@ class MindMap extends JPanel{
             }
         });
     }
-
     public void setFrame(ProgramFrame frame){
         this.frame = frame;
         AB = (AttributePane)frame.getComponentsMap().get("AB");
     }
     public void setHead(JSONNode head){ this.head = head; }
     public void printHead(){
+        timer.stop();
         requestFocusInWindow();
         g = getGraphics();
         BufferImage = createImage(getWidth(), getHeight());
@@ -172,17 +177,16 @@ class MindMap extends JPanel{
         LineMetrics ln = font.getLineMetrics(now.getData(), context);
         now.setContentHeight((int) (ln.getAscent() + ln.getDescent()));
 
-        if( now.getDataChanged() ) {
-            if (!now.getWidthChanged()) now.setWidth(now.getContentWidth() + 20);
-            if (!now.getHeightChanged()) now.setHeight(now.getContentHeight() + 10);
-            }
+//        if( now.getDataChanged() ) {
+        if (!now.getWidthChanged()) now.setWidth(now.getContentWidth() + 20);
+        if (!now.getHeightChanged()) now.setHeight(now.getContentHeight() + 10);
 
 
         now.setContentX(now.getX() + (now.getWidth() - now.getContentWidth()) / 2);
         now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
 
         now.setChanged(false);
-        now.setDataChanged(false);
+//        now.setDataChanged(false);
         if( now.getSelection() ) AB.setText();
     }
     private void initAllNodes(JSONNode now, int level, int idx){
@@ -247,7 +251,7 @@ class MindMap extends JPanel{
             now.setContentY((int) (now.getY() + (now.getHeight() + now.getContentHeight()) / 2 - ln.getDescent()));
         }
         now.setChanged(false);
-        now.setDataChanged(false);
+//        now.setDataChanged(false);
         now.setWidthChanged(false);
         now.setHeightChanged(false);
     }
@@ -305,9 +309,7 @@ class MindMap extends JPanel{
     private boolean dragProcessing = false;
     private long catchTime;
     Timer timer = new Timer(50, new ActionListener() {
-        public void actionPerformed (ActionEvent e) {
-            update(g);
-        }
+        public void actionPerformed (ActionEvent e) { update(g); }
     });
     private class MindMapMouseMotionListener implements  MouseMotionListener {
         public void mouseMoved(MouseEvent e){ }

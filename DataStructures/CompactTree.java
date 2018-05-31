@@ -32,7 +32,7 @@ public class CompactTree{
         public boolean ch = false; // changed
         public boolean wCh = false; // widthChanged
         public boolean hCh = false; // heightChanged
-        public boolean dCh = false; // dataChanged
+//        public boolean dCh = false; // dataChanged
 
         public CompactNode(JSONNode now){
             if( now == null ) return;
@@ -42,7 +42,7 @@ public class CompactTree{
             w = now.getWidth(); h = now.getHeight();
             level = now.getLevel(); idx = now.getIdx();
             color = now.getColor(); tC = now.getTextColor();
-            ch = now.getChanged(); dCh = now.getDataChanged();
+            ch = now.getChanged(); //dCh = now.getDataChanged();
             wCh = now.getWidthChanged(); hCh = now.getHeightChanged();
         }
     }
