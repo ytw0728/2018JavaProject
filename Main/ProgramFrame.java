@@ -27,6 +27,7 @@ public class ProgramFrame extends JFrame{
 	private HashMap componentsMap = new HashMap();
 	private JSplitPane split1, split2;
 	private String rootJson = "";
+	private boolean modified = false;
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -105,6 +106,7 @@ public class ProgramFrame extends JFrame{
 	}
 	public HashMap getComponentsMap(){return componentsMap;}
 	public void setRootJson(String json){ this.rootJson = json; }
+	public void setModified(boolean t){this.modified = t;}
 	public void setComponentsParent(){
 		MenuBar.setParent(this);
 		ToolBar.setParent(this);

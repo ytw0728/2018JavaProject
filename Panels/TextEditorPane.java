@@ -65,6 +65,7 @@ public class TextEditorPane extends JPanel {
                     for( int i = 0 ; i< subData.length;i++ ){
                         if(!subData[i].equals("")){
                             head = JSONNode.addJSON(head,subData[i],i);
+                            if( head == null ) return;
                             break;
                         }
                     }
@@ -76,7 +77,6 @@ public class TextEditorPane extends JPanel {
                 CompactTree ct = new CompactTree(head);
                 parent.setRootJson(gson.toJson(ct));
             }
-
         });
     }
     public void setParent(ProgramFrame frame){ parent = frame;}

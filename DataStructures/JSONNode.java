@@ -1,4 +1,5 @@
 package DataStructures;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +104,9 @@ public class JSONNode {
                 head = tmp;
             }
             else{
-                System.out.println("head is null. from JSONNode.java");
+
+                JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
             return head;
         }
@@ -112,8 +115,8 @@ public class JSONNode {
             idx--;
         }
         if( idx != 1 ){
-            System.out.println("The error is detected in addJSON of JSON class. from JSONNode.java");
-            return head;
+            JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
         JSONNode tmp = new JSONNode(str);
         tmp.setParent(now);

@@ -6,6 +6,7 @@ import Components.WhiteTextField;
 import Configs.Colors.ColorSwitch;
 import Configs.Colors.NodeColor;
 import DataStructures.JSONNode;
+import Main.ProgramFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AttributePane extends JPanel{
-    JFrame parent = null;
+    ProgramFrame parent = null;
     private Attribute attr;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
@@ -36,7 +37,6 @@ public class AttributePane extends JPanel{
         scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
         add(scroll);
-
 
         BlueButton applicationBtn = new BlueButton("변경하기");
         applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
@@ -61,7 +61,8 @@ public class AttributePane extends JPanel{
             }
         });
     }
-    public void setParent(JFrame frame){ parent = frame;}
+    public void setParent(ProgramFrame frame){ parent = frame; attr.setFrame(this.parent); }
+    public JFrame getParent(){return parent;}
     public void showAP(){ attr.showAll(); }
     public void hideAP(){ attr.hideAll(); }
     public void setText(){ attr.setText(); }
@@ -74,6 +75,8 @@ class Attribute extends JPanel{
     private JSONNode editTarget;
     private DarkLabel[] labelArr;
     private WhiteTextField[] whitefield;
+    private ProgramFrame frame = null;
+
     public Attribute(int x, int y, int width, int height) {
         setLayout(null);
         setBounds(x,y,width, height);
@@ -155,14 +158,24 @@ class Attribute extends JPanel{
     public void applyAttr(){
         String text, color, textColor; // text
         if( editTarget != null ){
-            if( !(text = whitefield[0].getText().trim()).equals("")) editTarget.setData(text);
-            if( !(color = whitefield[5].getText().trim()).equals("")) editTarget.setColor(color);
-            if( !(textColor = whitefield[6].getText().trim()).equals("")) editTarget.setTextColor(textColor);
+            boolean isChanged = false;
+            if( !(text = whitefield[0].getText().trim()).equals("")){
+                editTarget.setData(text);
+                isChanged =true;
+            }
+            if( !(color = whitefield[5].getText().trim()).equals("")){
+                editTarget.setColor(color);
+                isChanged =true;
+            }
+            if( !(textColor = whitefield[6].getText().trim()).equals("")){
+                editTarget.setTextColor(textColor);
+                isChanged =true;
+            }
             for( int i = 1; i <= 4; i++) {
-                if ( !whitefield[i].getText().trim().equals("") ) {
+                if (!whitefield[i].getText().trim().equals("")) {
                     try {
                         int num = Integer.parseInt(whitefield[i].getText().trim()); // x
-                        switch(i){
+                        switch (i) {
                             case 1:
                                 editTarget.setX(num);
                                 break;
@@ -177,14 +190,17 @@ class Attribute extends JPanel{
                                 break;
                             default:
                         }
+                        isChanged = true;
                     } catch (Exception e) {
                         System.out.println(e.getStackTrace());
                     }
                 }
             }
+            frame.setModified(isChanged);
         }
-
     }
+
+    public void setFrame(ProgramFrame frame){ this.frame = frame; }
 }
 
 
