@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 public class AttributePane extends JPanel{
     ProgramFrame parent = null;
     private Attribute attr;
+    private JScrollPane scroll;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
         setBounds(0, 0, x, y);
@@ -31,12 +32,15 @@ public class AttributePane extends JPanel{
         add(label);
 
         attr = new Attribute(0,0, x, y - y/20);
-        JScrollPane scroll = new JScrollPane(attr);
+        scroll = new JScrollPane(attr);
         scroll.setLayout(new ScrollPaneLayout() );
         scroll.getViewport().setBounds(0,y/20 ,x,y - 3*y/20);
         scroll.setBorder(new EmptyBorder(0,0,0,0));
         scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
-        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension( 13, Integer.MAX_VALUE));
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setVisible(false);
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("º¯°æÇÏ±â");
@@ -51,6 +55,8 @@ public class AttributePane extends JPanel{
                 Dimension size = getSize();
                 label.setBounds(0,0,size.width, label.getHeight());
                 scroll.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight() * 3);
+                scroll.getViewport().setBounds(0,0 ,x,Integer.MAX_VALUE);
+                attr.setBounds(0,0, size.width, size.height - label.getHeight() * 3 > 50 + 90 * 7 ? size.height - label.getHeight() * 3  : 50 + 90 * 7);
                 applicationBtn.setBounds(0,size.height - label.getHeight()*2,size.width, 2*label.getHeight());
             }
         });
@@ -64,14 +70,14 @@ public class AttributePane extends JPanel{
     }
     public void setParent(ProgramFrame frame){ parent = frame; attr.setFrame(this.parent); }
     public JFrame getParent(){return parent;}
-    public void showAP(){ attr.showAll(); }
-    public void hideAP(){ attr.hideAll(); }
+    public void showAP(){ scroll.setVisible(true);}
+    public void hideAP(){ scroll.setVisible(false); }
     public void setText(){ attr.setText(); }
     public void setEditTarget(JSONNode target){
         attr.setEditTarget(target);
     }
 
-    public void clear(){ attr.clear();}
+    public void clear(){ attr.clear(); scroll.setVisible(false);}
 }
 
 class Attribute extends JPanel{
@@ -79,19 +85,17 @@ class Attribute extends JPanel{
     private DarkLabel[] labelArr;
     private WhiteTextField[] whitefield;
     private ProgramFrame frame = null;
-
     public void clear(){
         editTarget = null;
         for(WhiteTextField f : whitefield ){
             f.setText("");
         }
-        setVisible(false);
     }
     public Attribute(int x, int y, int width, int height) {
         setLayout(null);
-        setBounds(x,y,width, height);
+        setBounds(x,y,width, 50 + 90 * 7 > height ? 50 + 90 * 7 : height );
 
-        setPreferredSize(new Dimension(100, 50 + 90 * 7));
+        setPreferredSize(new Dimension(width, 50 + 90 * 7 > height ? 50 + 90 * 7 : height ));
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 10));
         setBorder(new EmptyBorder(0,0,0,0));
@@ -129,11 +133,7 @@ class Attribute extends JPanel{
             add(whitefield[i]);
         }
 
-        setVisible(false);
-    }
-    public void showAll(){ setVisible(true); }
-    public void hideAll(){
-        setVisible(false);
+        setVisible(true);
     }
     public void setText(){
         if( editTarget == null ) return;
@@ -214,7 +214,7 @@ class Attribute extends JPanel{
         }
     }
 
-    public void setFrame(ProgramFrame frame){ this.frame = frame; }
+    public void setFrame(ProgramFrame frame){ this.frame = frame;}
 }
 
 

@@ -1,7 +1,6 @@
 package Main;
 
 import Components.NodeLabel;
-import Configs.Colors.ColorSwitch;
 import DataStructures.CompactNode;
 import DataStructures.JSONNode;
 import Panels.AttributePane;
@@ -12,8 +11,6 @@ import UtilBars.ToolBar;
 import com.google.gson.Gson;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
@@ -66,13 +63,14 @@ public class ProgramFrame extends JFrame{
 		split1.setDividerLocation(3 * splitWidth);
 		split2.setDividerLocation(6 * splitWidth);
 
-		split1.setResizeWeight(0.1);
+		split1.setResizeWeight(0);
 		split2.setResizeWeight(0);
 
 		split2.setLeftComponent(MM);
 		split2.setRightComponent(AB);
-		split1.setLeftComponent(TE);
+		split2.setBounds(0,0,splitWidth * 9 , CompHeight * 18);
 
+		split1.setLeftComponent(TE);
 		split1.setRightComponent(split2);
 
 		split1.setBounds(0, CompHeight * 2, width, CompHeight * 18);
@@ -92,38 +90,26 @@ public class ProgramFrame extends JFrame{
 		componentsMap.put("ToolBar", ToolBar);
 		NodeLabel.setMM(MM);
 
-
-		timer.start();
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
+				super.componentResized(e);
 				Dimension size = getContentPane().getSize();
 				MenuBar.setSize(size.width, MenuBar.getHeight());
 				ToolBar.setSize(size.width, ToolBar.getHeight());
+
+				int splitWidth = size.width / 12;
 				split1.setSize(size.width, size.height - MenuBar.getHeight() - ToolBar.getHeight());
-				split2.setSize(size.width - TE.getWidth(), size.height);
-				TE.setSize(3*size.width/12, size.height );
-				AB.setSize( 3*size.width/12, size.height);
-				MM.setSize(split2.getWidth() - AB.getWidth(), size.height);
+				split2.setSize(size.width - 3*splitWidth, size.height - MenuBar.getHeight() - ToolBar.getHeight());
+
+				TE.setSize(3*splitWidth, size.height );
+				AB.setSize( 3*splitWidth, size.height);
+				MM.setSize(6*splitWidth, size.height);
 				split1.setDividerLocation(TE.getWidth());
-				split2.setDividerLocation(split2.getWidth() - AB.getWidth());
+				split2.setDividerLocation(MM.getWidth());
 			}
 		});
 	}
 
-	Timer timer = new Timer(200, new ActionListener() {
-		public void actionPerformed (ActionEvent e) {
-			Dimension size = getContentPane().getSize();
-			MenuBar.setSize(size.width, MenuBar.getHeight());
-			ToolBar.setSize(size.width, ToolBar.getHeight());
-			split1.setSize(size.width, size.height - MenuBar.getHeight() - ToolBar.getHeight());
-			split2.setSize(size.width - TE.getWidth(), size.height);
-			TE.setSize(3*size.width/12, size.height );
-			AB.setSize( 3*size.width/12, size.height);
-			MM.setSize(split2.getWidth() - AB.getWidth(), size.height);
-			split1.setDividerLocation(TE.getWidth());
-			split2.setDividerLocation(split2.getWidth() - AB.getWidth());
-		}
-	});
 	private void layout( JComponent comp) {
 		add(comp);
 	}

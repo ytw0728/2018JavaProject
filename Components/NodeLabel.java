@@ -1,4 +1,5 @@
 package Components;
+import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
 import DataStructures.JSONNode;
 import Panels.MindMapPane;
@@ -37,7 +38,8 @@ public class NodeLabel extends JLabel{
         super.paintComponent(g);
     }
     protected void paintBorder(Graphics g) {
-        g.setColor(getBackground());
+//        g.setColor(getBackground());
+        g.setColor(ColorSwitch.init(ColorSwitch.DEEPDARK));
         g.drawRoundRect(0,  0, getWidth()-1, getHeight()-1, arc, arc);
     }
     public boolean contains(int x, int y) {
@@ -53,9 +55,9 @@ public class NodeLabel extends JLabel{
     }
     private class NodeMouseListener extends MouseAdapter {
         @Override
-        public void mouseEntered(MouseEvent e) { setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); }
+        public void mouseEntered(MouseEvent e) { MM.setCursorPointer(true);  }
         @Override
-        public void mouseExited(MouseEvent e) { setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)); }
+        public void mouseExited(MouseEvent e) { MM.setCursorPointer(false);  }
         @Override
         public void mousePressed(MouseEvent e) {
             MM.setTarget(parent);

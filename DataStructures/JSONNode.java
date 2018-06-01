@@ -49,9 +49,13 @@ public class JSONNode{
     public void setHeightChanged(boolean t){this.heightChanged = t;}
 //    public void setDataChanged(boolean t){this.dataChanged = t;}
 
-    public void setChildren(JSONNode newNode){
+    public boolean setChildren(JSONNode newNode){
         if( children.size() < Settings.CHILDRENNUM) children.add(newNode);
-        else System.out.println("You can't add the child nodes more than " + Settings.CHILDRENNUM);
+        else{
+            JOptionPane.showMessageDialog(null, "올바르지 않은 입력입니다.\n현재 한 노드 당 허용된 자식의 갯수는 '" + Settings.CHILDRENNUM+ "개' 입니다.\nConfigs.Numerics.Settings을 통해 CHILDRENNUM값을 변경해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
     public void setParent(JSONNode parent){this.parent = parent; changed = true;}
 
@@ -113,7 +117,7 @@ public class JSONNode{
                 head = tmp;
             }
             else{
-                JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.\n각 계층은 단계를 건너뛸 수 없으며 각 단계는 tab으로 구분됩니다.", "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
             return head;
@@ -123,11 +127,11 @@ public class JSONNode{
             idx--;
         }
         if( idx != 1 ){
-            JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.\n각 계층은 단계를 건너뛸 수 없으며 각 단계는 tab으로 구분됩니다.", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         tmp.setParent(now);
-        now.setChildren(tmp);
+        if( !now.setChildren(tmp) ) return null;
         return head;
     }
 }

@@ -20,26 +20,32 @@ import java.awt.geom.*;
 public class MindMapPane extends JPanel {
     ProgramFrame parent = null;
     private MindMap mindMap = null;
-    private JScrollPane scroll;
+    private JScrollPane scroll = null;
+    private DarkLabel label = null;
+
     public MindMapPane(int x, int y, String str) {
         setLayout(null);
-        setBounds(0,0, x, y);
+        setBounds(0,0, x,y);
 
-        DarkLabel label = new DarkLabel(str);
+        label = new DarkLabel(str);
         label.setBounds(0,0,150, y/20);
         label.setBackground(ColorSwitch.init(ColorSwitch.DEEPDARK) );
-//        label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DEEPDARK), 1));
         label.setBorder(new EmptyBorder(0,0,0,0));
 
         add(label);
 
-        mindMap = new MindMap(0, 0,x,y-y/20);
+        mindMap = new MindMap(0, 0, x,y-y/20);
 
         scroll = new JScrollPane(mindMap);
-        scroll.setBounds(0,y/20, x, y-y/20);
+        scroll.setBounds(0,y/20, x, (y-y/20));
+        scroll.getViewport().setBounds(0,0, x, (y-y/20));
         scroll.setBorder(new EmptyBorder(0,0,0,0));
         scroll.setViewportBorder(null);
+        scroll.getViewport().setViewSize(new Dimension(x * 3, ( y -y/20 )* 3));
 
+        scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 0));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, Integer.MAX_VALUE));
+        scroll.setVisible(true);
         add(scroll);
 
 
@@ -63,8 +69,17 @@ public class MindMapPane extends JPanel {
             public void componentResized(ComponentEvent e) {
                 Dimension size = getSize();
                 label.setBounds(0,0,label.getWidth(), label.getHeight());
-                mindMap.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight());
-//                mindMap.update();
+                scroll.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight());
+                scroll.getViewport().setViewSize(new Dimension(x * 3, ( y - y/20 )* 3));
+                mindMap.setBounds(0,0, size.width, size.height - label.getHeight());
+
+                Rectangle scrollBounds = scroll.getViewport().getViewRect();
+                Dimension scrollSize = new Dimension(x * 3, ( y - y/20 )* 3);
+                int scrollX = (scrollSize.width - scrollBounds.width) / 2;
+                int scrollY = (scrollSize.height - scrollBounds.height) / 2;
+                scroll.getHorizontalScrollBar().setValue(scrollX);
+                scroll.getVerticalScrollBar().setValue(scrollY);
+
             }
         });
     }
@@ -72,44 +87,64 @@ public class MindMapPane extends JPanel {
         parent = frame;
         mindMap.setFrame(this.parent);
     }
-    public void setHead(JSONNode head){ mindMap.setHead(head); }
+    public void setHead(JSONNode head){
+        scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 13));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
+        mindMap.setHead(head);
+    }
     public void printHead(){
+        Rectangle scrollBounds = scroll.getViewport().getViewRect();
+        Dimension scrollSize = scroll.getViewport().getViewSize();
+        int scrollX = (scrollSize.width - scrollBounds.width) / 2;
+        int scrollY = (scrollSize.height - scrollBounds.height) / 2;
+        scroll.getHorizontalScrollBar().setValue(scrollX);
+        scroll.getVerticalScrollBar().setValue(scrollY);
         mindMap.printHead();
     }
     public void clear(){
         mindMap.clear();
+        scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 0));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, Integer.MAX_VALUE));
+        revalidate();
     }
-
-    public void setTarget(JSONNode target){
-        mindMap.setTarget(target);
-    }
-
+    public void setTarget(JSONNode target){ mindMap.setTarget(target); }
+    public void setCursorPointer(boolean t){ mindMap.setCursorPointer(t); }
 }
 
 class MindMap extends JPanel{
     private JSONNode head = null;
     private Graphics2D g2d;
-    private Image BufferImage;
     private Graphics g;
     private ProgramFrame frame = null;
     private AttributePane AB;
+    private boolean initialized = false;
+
+    private boolean cursorPointer = false;
     public void clear(){
         timer.stop();
+        removeAll();
         head = null;
-        g2d.setColor(ColorSwitch.init(ColorSwitch.DARK));
-        g2d.fillRect(0,0,getWidth(),getHeight());
-        g.drawImage(BufferImage,0,0,null);
+        setTarget(null);
+        initialized = false;
+        g.setColor(ColorSwitch.init(ColorSwitch.DARK));
+        g.fillRect(0,0,getWidth(),getHeight());
+
+        g = null;
+        g2d = null;
+        revalidate();
     }
     public MindMap(int x, int y, int width, int height) {
+        g = null; g2d = null; head = null; initialized = false;
         setFocusable(true);
         setLayout(null);
-        setBounds(x,y, width, height);
+        setBounds(x,y, width * 3, height * 3);
+        setPreferredSize(new Dimension(width * 3, height * 3));
+
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
         setBorder(new EmptyBorder(0,0,0,0));
         setDoubleBuffered(true);
         setForeground(Color.WHITE);
         setVisible(true);
-
 
         this.addMouseListener(new MindMapMouseListener());
         this.addMouseMotionListener(new MindMapMouseMotionListener());
@@ -131,11 +166,17 @@ class MindMap extends JPanel{
         this.frame = frame;
         AB = (AttributePane)frame.getComponentsMap().get("AB");
     }
-    public void setHead(JSONNode head){ this.head = head; }
+    public void setHead(JSONNode head){ initialized = false; this.head = head; }
     public void printHead(){
         timer.stop();
+        initialized = false;
         requestFocusInWindow();
+        if( g == null || g2d == null){
+            repaint();
+            return;
+        }
         initAllNodes(head,0,0);
+        initialized = true;
         repaint();
         timer.start();
     }
@@ -144,8 +185,10 @@ class MindMap extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         this.g = g;
-        this.g2d = (Graphics2D)g;
-        if( head == null ) return;
+        this.g2d = (Graphics2D) g;
+        if( !initialized || head == null || targetIsset ) return;
+        if( cursorPointer ) setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        else setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         removeAll();
 
         g.setColor(ColorSwitch.init(ColorSwitch.DEEPDARK));
@@ -178,30 +221,33 @@ class MindMap extends JPanel{
         if( now.getLevel() != 0 ) {
             JSONNode parent = now.getParent();
             int parX = parent.getX(), parY = parent.getY(), parHeight = parent.getHeight(), parWidth = parent.getWidth();
-            parX += parWidth /2;
-            parY += parHeight /2;
+            int x = now.getX(); int y = now.getY();
 
-            int angle = 360 / Settings.CHILDRENNUM;
-            angle = ( angle * now.getIdx() ) % 360;
-
-            switch(now.getIdx() / 90) {
-                case 0: // 2사분면;
-                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY() + now.getHeight());// 하
-                    now.setArrowEnd(parX, parY + parHeight / 2); // 좌
-                    break;
-                case 1: // 1사분면
-                    now.setArrowStart(now.getX(), now.getY() + now.getHeight() / 2); // 좌
-                    now.setArrowEnd(parX + parWidth / 2, parY); // 상
-                    break;
-                case 2: // 4사분면
+            if( parX <= x ) {
+                if( parY <= y) {
+                    // 1사분면
                     now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY()); // 상
                     now.setArrowEnd(parX + parWidth, parY + parHeight / 2); // 우
-                    break;
-                case 3: // 3사분면
+                }
+                else {
+                    // 4사분면
+                    now.setArrowStart(now.getX(), now.getY() + now.getHeight() / 2); // 좌
+                    now.setArrowEnd(parX + parWidth / 2, parY); // 상
+                }
+            }
+            else {
+                if(parY <= y ) {
+                    // 2사분면
                     now.setArrowStart(now.getX() + now.getWidth(), now.getY() + now.getHeight() / 2); // 우
                     now.setArrowEnd(parX + parWidth / 2, parY + parHeight); // 하
-                    break;
+                }
+                else {
+                    // 3사분면;
+                    now.setArrowStart(now.getX() + now.getWidth() / 2, now.getY() + now.getHeight());// 하
+                    now.setArrowEnd(parX, parY + parHeight / 2); // 좌
+                }
             }
+
             drawLine(now.getArrowStartX(), now.getArrowStartY(), now.getArrowEndX(), now.getArrowEndY());
         }
         if( now.getSelection() ) label.setForeground(Color.WHITE);
@@ -223,8 +269,6 @@ class MindMap extends JPanel{
 //        if (!now.getWidthChanged()) now.setWidth(now.getContentWidth() + 20);
 //        if (!now.getHeightChanged()) now.setHeight(now.getContentHeight() + 10);
 //    }
-
-
 
         now.setChanged(false);
 //        now.setDataChanged(false);
@@ -264,40 +308,22 @@ class MindMap extends JPanel{
                 parX += parWidth /2;
                 parY += parHeight /2;
 //                int margin = 150;
-                int margin = 200;
+//                int margin = 200;
+                int margin = 300;
                 int tmpLevel = level;
                 while(tmpLevel-- > 0){
                     margin /= 3;
                     margin *= 2;
                 }
-                int angle = 360 / Settings.CHILDRENNUM;
+                int childrenLoop = now.getIdx() / Settings.LAYOUTNUM;
+                int angle = 360 / Settings.LAYOUTNUM;
                 angle = ( angle * idx ) % 360;
-                int x = parX + (int)(margin * Math.cos(Math.toRadians(angle))) - now.getWidth()/2;
-                int y = parY + (int)(margin * Math.sin(Math.toRadians(angle))) - now.getHeight()/2;
+                int spread = 10;
+                int x = parX + (int)(margin * Math.cos(Math.toRadians(angle))) - now.getWidth()/2 + spread * childrenLoop;
+                int y = parY + (int)(margin * Math.sin(Math.toRadians(angle))) - now.getHeight()/2 + spread * childrenLoop;
 
                 now.setX(x);
                 now.setY(y);
-                /*
-                switch(idx){
-                    case 0: // 2사분면
-                        now.setX(parX - margin - now.getWidth()/2);
-                        now.setY(parY - margin - now.getHeight()/2);
-
-                        break;
-                    case 1: // 1사분면
-                        now.setX(parX + parWidth  + margin- now.getWidth()/2);
-                        now.setY(parY - margin- now.getHeight()/2);
-                        break;
-                    case 2: // 4사분면
-                        now.setX(parX + parWidth + margin- now.getWidth()/2);
-                        now.setY(parY + parHeight + margin- now.getHeight()/2);
-                        break;
-                    case 3: // 3사분면
-                        now.setX(parX - margin- now.getWidth()/2);
-                        now.setY(parY + parHeight + margin- now.getHeight()/2);
-                        break;
-                }
-                */
             }
         }
         NodeLabel label = new NodeLabel(now.getData(), now, 10);
@@ -357,14 +383,14 @@ class MindMap extends JPanel{
     }
 
     private JSONNode target = null;
-    private boolean called = false;
+    private boolean targetIsset = false;
     public void setTarget(JSONNode target){
         if(this.target != null ) this.target.setSelection(false);
         this.target = target;
         AB.showAP();
         AB.setEditTarget(target);
-        target.setSelection(true);
-        called = true;
+        if( target != null )target.setSelection(true);
+        targetIsset = target != null;
     }
 
     Timer timer = new Timer(50, new ActionListener() {
@@ -380,23 +406,26 @@ class MindMap extends JPanel{
                 y -= target.getHeight()/2;
                 target.setX(x);
                 target.setY(y);
+                cursorPointer = true;
             }
         }
     }
 
     private class MindMapMouseListener extends MouseAdapter{
         public void mousePressed(MouseEvent e) {
-            if( !called && target != null ){
+            if( !targetIsset && target != null ){
                 target.setSelection(false);
                 target = null;
                 AB.hideAP();
                 AB.setEditTarget(null);
             }
-            called =false;
+            targetIsset =false;
         }
         public void mouseReleased(MouseEvent e){
 
         }
     }
+
+    public void setCursorPointer(boolean t ){ this.cursorPointer = t; }
 
 }

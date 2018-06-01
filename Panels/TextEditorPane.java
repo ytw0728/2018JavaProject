@@ -35,7 +35,7 @@ public class TextEditorPane extends JPanel {
         JScrollPane scroll = new JScrollPane(editor);
         scroll.setBounds(0,y/20,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
-        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("적용하기");
@@ -50,6 +50,7 @@ public class TextEditorPane extends JPanel {
                 Dimension size = getSize();
                 label.setBounds(0,0,size.width, label.getHeight());
                 scroll.setBounds(0,label.getHeight(), size.width, size.height - label.getHeight() * 3);
+                editor.setBounds(0,0, size.width, size.height - label.getHeight() * 3);
                 applicationBtn.setBounds(0,size.height - label.getHeight()*2,size.width, 2*label.getHeight());
             }
         });
