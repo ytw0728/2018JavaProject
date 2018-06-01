@@ -1,14 +1,18 @@
 package DataStructures;
+import Components.NodeLabel;
+import Configs.Numerics.Settings;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONNode {
+public class JSONNode{
+    private NodeLabel label;
     private String data;
     private List<JSONNode> children;
     private JSONNode parent;
     private int x = -1 ,y = -1,width = -1,height = -1;
-    private int contentX = -1, contentY = -1, contentWidth = -1, contentHeight = -1;
+    private int contentWidth = -1, contentHeight = -1;
     private int arrowStartX = 0, arrowStartY = 0;
     private int arrowEndX = 0, arrowEndY = 0;
     private int level = -1, idx = -1;
@@ -25,13 +29,12 @@ public class JSONNode {
         this.children = new ArrayList<JSONNode>();
         this.parent= null;
     }
+    public void setLabel(NodeLabel label){this.label = label;}
 //    public void setData(String data){ if( this.data != data){ this.data = data; changed = true; dataChanged = true; }}
     public void setX(int x){if( this.x != x ){ this.x=x; changed = true;}}
     public void setY(int y){if(this.y != y){this.y=y; changed = true;}}
     public void setWidth(int width){if(this.width != width){ this.width = width; changed = true; widthChanged = true; }}
     public void setHeight(int height){if(this.height != height){ this.height= height; changed = true; heightChanged = true; }}
-    public void setContentX(int x){this.contentX = x;}
-    public void setContentY(int y){this.contentY= y;}
     public void setContentWidth(int width){this.contentWidth = width;}
     public void setContentHeight(int height){this.contentHeight= height;}
     public void setArrowStart(int x, int y){this.arrowStartX = x; this.arrowStartY = y;}
@@ -47,18 +50,17 @@ public class JSONNode {
 //    public void setDataChanged(boolean t){this.dataChanged = t;}
 
     public void setChildren(JSONNode newNode){
-        if( children.size() < 4) children.add(newNode);
-        else System.out.println("You can't add the child nodes more than 4.");
+        if( children.size() < Settings.CHILDRENNUM) children.add(newNode);
+        else System.out.println("You can't add the child nodes more than " + Settings.CHILDRENNUM);
     }
     public void setParent(JSONNode parent){this.parent = parent; changed = true;}
 
+    public NodeLabel getLabel(){return this.label;}
     public String getData(){return data;}
     public int getX(){return x;}
     public int getY(){return y;}
     public int getWidth(){return width;}
     public int getHeight(){return height;}
-    public int getContentX(){return this.contentX;}
-    public int getContentY(){return this.contentY;}
     public int getContentWidth(){return this.contentWidth;}
     public int getContentHeight(){return this.contentHeight;}
     public int getArrowStartX(){return arrowStartX;}
@@ -82,6 +84,10 @@ public class JSONNode {
         return null;
     }
     public JSONNode getParent(){return parent;}
+
+
+
+
     public static JSONNode findInXY(JSONNode node, int x, int y){
         if( node == null ) return null;
         if( node.getX() <= x && node.getY() <= y && x <= node.getX() + node.getWidth() && y <= node.getY() + node.getHeight() ) return node;

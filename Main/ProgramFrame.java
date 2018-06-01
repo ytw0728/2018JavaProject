@@ -1,5 +1,6 @@
 package Main;
 
+import Components.NodeLabel;
 import Configs.Colors.ColorSwitch;
 import DataStructures.CompactNode;
 import DataStructures.JSONNode;
@@ -11,12 +12,15 @@ import UtilBars.ToolBar;
 import com.google.gson.Gson;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class ProgramFrame extends JFrame{
 	private UtilBars.MenuBar MenuBar;
@@ -72,8 +76,8 @@ public class ProgramFrame extends JFrame{
 		split1.setRightComponent(split2);
 
 		split1.setBounds(0, CompHeight * 2, width, CompHeight * 18);
-		split1.setBorder(BorderFactory.createLineBorder(ColorSwitch.init(ColorSwitch.DARK), 1));
-		split2.setBorder(BorderFactory.createLineBorder(ColorSwitch.init(ColorSwitch.DARK), 1));
+		split1.setBorder(new EmptyBorder(0,0,0,0));
+		split2.setBorder(new EmptyBorder(0,0,0,0));
 
 		layout(MenuBar);
 		layout(ToolBar);
@@ -86,7 +90,10 @@ public class ProgramFrame extends JFrame{
 		componentsMap.put("AB", AB);
 		componentsMap.put("MenuBar", MenuBar);
 		componentsMap.put("ToolBar", ToolBar);
+		NodeLabel.setMM(MM);
 
+
+		timer.start();
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				Dimension size = getContentPane().getSize();
@@ -102,6 +109,21 @@ public class ProgramFrame extends JFrame{
 			}
 		});
 	}
+
+	Timer timer = new Timer(200, new ActionListener() {
+		public void actionPerformed (ActionEvent e) {
+			Dimension size = getContentPane().getSize();
+			MenuBar.setSize(size.width, MenuBar.getHeight());
+			ToolBar.setSize(size.width, ToolBar.getHeight());
+			split1.setSize(size.width, size.height - MenuBar.getHeight() - ToolBar.getHeight());
+			split2.setSize(size.width - TE.getWidth(), size.height);
+			TE.setSize(3*size.width/12, size.height );
+			AB.setSize( 3*size.width/12, size.height);
+			MM.setSize(split2.getWidth() - AB.getWidth(), size.height);
+			split1.setDividerLocation(TE.getWidth());
+			split2.setDividerLocation(split2.getWidth() - AB.getWidth());
+		}
+	});
 	private void layout( JComponent comp) {
 		add(comp);
 	}

@@ -9,6 +9,7 @@ import DataStructures.JSONNode;
 import Main.ProgramFrame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -26,14 +27,14 @@ public class AttributePane extends JPanel{
         DarkLabel label = new DarkLabel(str);
         label.setSize(getWidth(), getHeight()/20);
         label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
-        label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+        label.setBorder(new EmptyBorder(0,0,0,0));
         add(label);
 
         attr = new Attribute(0,0, x, y - y/20);
         JScrollPane scroll = new JScrollPane(attr);
         scroll.setLayout(new ScrollPaneLayout() );
         scroll.getViewport().setBounds(0,y/20 ,x,y - 3*y/20);
-        scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        scroll.setBorder(new EmptyBorder(0,0,0,0));
         scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(15, Integer.MAX_VALUE));
         add(scroll);
@@ -42,7 +43,7 @@ public class AttributePane extends JPanel{
         applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
         add(applicationBtn);
 
-        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        setBorder(new EmptyBorder(0,0,0,0));
         setVisible(true);
 
         this.addComponentListener(new ComponentAdapter() {
@@ -93,7 +94,7 @@ class Attribute extends JPanel{
         setPreferredSize(new Dimension(100, 50 + 90 * 7));
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 10));
-        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        setBorder(new EmptyBorder(0,0,0,0));
         setForeground(Color.WHITE);
 
         // by KH
