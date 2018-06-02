@@ -110,7 +110,7 @@ public class MindMapPane extends JPanel {
         revalidate();
     }
     public void setTarget(JSONNode target){ mindMap.setTarget(target); }
-    public void setCursorPointer(boolean t){ mindMap.setCursorPointer(t); }
+    public void setCursorPointer(int t){mindMap.setCursorPointer(t);}
 }
 
 class MindMap extends JPanel{
@@ -120,18 +120,23 @@ class MindMap extends JPanel{
     private ProgramFrame frame = null;
     private AttributePane AB;
     private JSONNode target = null;
-    private boolean targetIsset = false;
+    private boolean targetSelected = false;
     private boolean initialized = false;
     private boolean modified = false;
+    private int cursorPointer = 0;  // 0 : default , 1 : x resize , 2 : y resize, 3 : xy resize
+    private int POINTERTYPE = Cursor.DEFAULT_CURSOR;
 
-    private boolean cursorPointer = false;
+
     public void clear(){
         timer.stop();
         removeAll();
         head = null;
         setTarget(null);
         initialized = false;
-        targetIsset = false;
+        targetSelected = false;
+        cursorPointer = 0;
+        POINTERTYPE = Cursor.DEFAULT_CURSOR;
+
         g.setColor(ColorSwitch.init(ColorSwitch.DARK));
         g.fillRect(0,0,getWidth(),getHeight());
 
@@ -192,11 +197,10 @@ class MindMap extends JPanel{
         super.paintComponent(g);
         this.g = g;
         this.g2d = (Graphics2D) g;
-        if( !initialized || head == null || targetIsset ) return;
+        if( !initialized || head == null || targetSelected ) return;
         frame.setModified(modified);
         modified = false;
-        if( cursorPointer ) setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        else setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        setCursor(Cursor.getPredefinedCursor(POINTERTYPE));
         removeAll();
 
         g.setColor(ColorSwitch.init(ColorSwitch.DEEPDARK));
@@ -397,42 +401,85 @@ class MindMap extends JPanel{
         AB.showAP();
         AB.setEditTarget(target);
         if( target != null )target.setSelection(true);
-        targetIsset = target != null;
+        targetSelected = target != null;
     }
 
     Timer timer = new Timer(50, new ActionListener() {
         public void actionPerformed (ActionEvent e) {repaint();}
     });
+    private int fixCursorPointer = 0;
     private class MindMapMouseMotionListener extends MouseMotionAdapter {
         public void mouseMoved(MouseEvent e){ }
         public void mouseDragged(MouseEvent e){
             if(target != null ){
                 int x = e.getXOnScreen() - getLocationOnScreen().x;
                 int y = e.getYOnScreen() - getLocationOnScreen().y;
-                x -= target.getWidth()/2;
-                y -= target.getHeight()/2;
-                target.setX(x);
-                target.setY(y);
-                cursorPointer = true;
+
+                int targetPointX = target.getX();
+                int targetPointY = target.getY();
+                switch(fixCursorPointer){
+                    case 1 :
+                        x -= target.getWidth()/2;
+                        y -= target.getHeight()/2;
+                        target.setX(x);
+                        target.setY(y);
+                        break;
+                    case 2 : // width resize
+                        if( x - targetPointX> 0 ) target.setWidth( pressedWidth  + x - pressedX);
+                        break;
+                    case 3 : // height resize
+                        if( y - targetPointY > 0 ) target.setHeight( pressedHeight + y - pressedY);
+                        break;
+                    case 4 : // width , height resize
+                        if( x - targetPointX > 0 ) target.setWidth( pressedWidth + x - pressedX );
+                        if( y - targetPointY > 0 ) target.setHeight( pressedHeight + y - pressedY);
+                        break;
+                }
+
+                cursorPointer = fixCursorPointer;
             }
         }
     }
 
+    private int pressedX = -1, pressedY = -1;
+    private int pressedWidth = -1, pressedHeight = -1;
     private class MindMapMouseListener extends MouseAdapter{
         public void mousePressed(MouseEvent e) {
-            if( !targetIsset && target != null ){
+            if( targetSelected && target != null){
+                pressedX = e.getXOnScreen() - getLocationOnScreen().x;
+                pressedY = e.getYOnScreen() - getLocationOnScreen().y;
+                pressedWidth = target.getWidth();
+                pressedHeight = target.getHeight();
+                fixCursorPointer = cursorPointer;
+                System.out.println( target.getX()  + " " + (e.getXOnScreen() - getLocationOnScreen().x));
+            }
+            if( !targetSelected && target != null ){
                 target.setSelection(false);
                 target = null;
                 AB.hideAP();
                 AB.setEditTarget(null);
             }
-            targetIsset =false;
+            targetSelected =false;
         }
         public void mouseReleased(MouseEvent e){
-
+            fixCursorPointer = 0;
         }
     }
 
-    public void setCursorPointer(boolean t ){ this.cursorPointer = t; }
+    public void setCursorPointer(int t){
+        switch(t){
+            case 0 : POINTERTYPE = Cursor.DEFAULT_CURSOR;
+                break;
+            case 1 : POINTERTYPE = Cursor.HAND_CURSOR;
+                break;
+            case 2 : POINTERTYPE = Cursor.E_RESIZE_CURSOR;
+                break;
+            case 3 : POINTERTYPE = Cursor.S_RESIZE_CURSOR;
+                break;
+            case 4 : POINTERTYPE = Cursor.SE_RESIZE_CURSOR;
+                break;
+        }
+        this.cursorPointer= t;
+    }
 
 }

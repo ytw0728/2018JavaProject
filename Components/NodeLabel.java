@@ -52,12 +52,26 @@ public class NodeLabel extends JLabel{
     private class NodeMouseMotionListener extends MouseMotionAdapter {
         @Override
         public void mouseDragged(MouseEvent e){ MM.dispatchEvent(e); }
+        @Override
+        public void mouseMoved(MouseEvent e){
+            int gap = 5;
+            int x = e.getX(); int y = e.getY();
+            int width = getWidth(); int height = getHeight();
+            if( 0 <= x && x <= width - gap  && 0 <= y && y <= height- gap ) MM.setCursorPointer(1);
+            else{
+                int type = 1;
+                if( width - gap <= x && x <= width ) type += 1;
+                if( height - gap  <= y  && y <= height ) type += 2;
+                MM.setCursorPointer(type);
+            }
+        }
     }
     private class NodeMouseListener extends MouseAdapter {
         @Override
-        public void mouseEntered(MouseEvent e) { MM.setCursorPointer(true);  }
+        public void mouseEntered(MouseEvent e) { }
+
         @Override
-        public void mouseExited(MouseEvent e) { MM.setCursorPointer(false);  }
+        public void mouseExited(MouseEvent e) { MM.setCursorPointer(0); }
         @Override
         public void mousePressed(MouseEvent e) {
             MM.setTarget(parent);
