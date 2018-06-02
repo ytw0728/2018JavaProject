@@ -11,6 +11,8 @@ import UtilBars.ToolBar;
 import com.google.gson.Gson;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ public class ProgramFrame extends JFrame{
 	private AttributePane 	AB;
 	private HashMap componentsMap = new HashMap();
 	private JSplitPane split1, split2;
+	private JSONNode rootHead = null;
 	private String rootJson = "";
 	private boolean modified = false;
 	private Gson gson = new Gson();
@@ -114,8 +117,9 @@ public class ProgramFrame extends JFrame{
 		add(comp);
 	}
 	public HashMap getComponentsMap(){return componentsMap;}
+	public void setRootHead(JSONNode head){this.rootHead = head; timer.start(); }
 	public void setRootJson(String json){ this.rootJson = json; }
-	public void setModified(boolean t){this.modified = t;}
+	public void setModified(boolean t){this.modified = (this.modified || t);}
 	public void setComponentsParent(){
 		MenuBar.setParent(this);
 		ToolBar.setParent(this);
@@ -123,8 +127,9 @@ public class ProgramFrame extends JFrame{
 		AB.setParent(this);
 		TE.setParent(this);
 	}
-
 	public void clearAll(){
+		timer.stop();
+		this.rootHead = null;
 		this.rootJson = "";
 		this.modified = false;
 		TE.clearText();
@@ -145,4 +150,13 @@ public class ProgramFrame extends JFrame{
 		JSONNode head = node.convertToJSONNode();
 		return head;
 	}
+	Timer timer = new Timer(500, new ActionListener() {
+		public void actionPerformed (ActionEvent e) {
+			if( modified ){
+				modified = false;
+				CompactNode ct = CompactNode.makeTree(rootHead); // for changing to json
+				setRootJson(gson.toJson(ct));
+			}
+		}
+	});
 }

@@ -90,7 +90,9 @@ public class MindMapPane extends JPanel {
     public void setHead(JSONNode head){
         scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 13));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
+        revalidate();
         mindMap.setHead(head);
+        parent.setRootHead(head);
     }
     public void printHead(){
         Rectangle scrollBounds = scroll.getViewport().getViewRect();
@@ -117,7 +119,10 @@ class MindMap extends JPanel{
     private Graphics g;
     private ProgramFrame frame = null;
     private AttributePane AB;
+    private JSONNode target = null;
+    private boolean targetIsset = false;
     private boolean initialized = false;
+    private boolean modified = false;
 
     private boolean cursorPointer = false;
     public void clear(){
@@ -126,6 +131,7 @@ class MindMap extends JPanel{
         head = null;
         setTarget(null);
         initialized = false;
+        targetIsset = false;
         g.setColor(ColorSwitch.init(ColorSwitch.DARK));
         g.fillRect(0,0,getWidth(),getHeight());
 
@@ -187,6 +193,8 @@ class MindMap extends JPanel{
         this.g = g;
         this.g2d = (Graphics2D) g;
         if( !initialized || head == null || targetIsset ) return;
+        frame.setModified(modified);
+        modified = false;
         if( cursorPointer ) setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         else setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         removeAll();
@@ -259,6 +267,7 @@ class MindMap extends JPanel{
     }
 
     private void reInitNode(JSONNode now) {
+        modified = true;
         Font font = g2d.getFont();
         FontRenderContext context = g2d.getFontRenderContext();
         now.setContentWidth((int) font.getStringBounds(now.getData(), context).getWidth());
@@ -382,8 +391,6 @@ class MindMap extends JPanel{
         return arrowHead;
     }
 
-    private JSONNode target = null;
-    private boolean targetIsset = false;
     public void setTarget(JSONNode target){
         if(this.target != null ) this.target.setSelection(false);
         this.target = target;

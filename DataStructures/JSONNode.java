@@ -1,5 +1,6 @@
 package DataStructures;
 import Components.NodeLabel;
+import Configs.Common;
 import Configs.Numerics.Settings;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class JSONNode{
     public boolean setChildren(JSONNode newNode){
         if( children.size() < Settings.CHILDRENNUM) children.add(newNode);
         else{
-            JOptionPane.showMessageDialog(null, "올바르지 않은 입력입니다.\n현재 한 노드 당 허용된 자식의 갯수는 '" + Settings.CHILDRENNUM+ "개' 입니다.\nConfigs.Numerics.Settings을 통해 CHILDRENNUM값을 변경해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.OVERCHILDNUMMSG, "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -117,7 +118,7 @@ public class JSONNode{
                 head = tmp;
             }
             else{
-                JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.\n각 계층은 단계를 건너뛸 수 없으며 각 단계는 tab으로 구분됩니다.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
             return head;
@@ -127,7 +128,7 @@ public class JSONNode{
             idx--;
         }
         if( idx != 1 ){
-            JOptionPane.showMessageDialog(null, "올바르지 않은 입력 방식입니다.\n각 계층은 단계를 건너뛸 수 없으며 각 단계는 tab으로 구분됩니다.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         tmp.setParent(now);
