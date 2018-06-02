@@ -4,6 +4,6 @@ import Configs.Numerics.Settings;
 
 public class Common {
     public static boolean RESIZABLE = false;
-    public static String INPUTERRORMSG = "ì˜¬ë°”ë¥´ì§€ ì•Šì€ ìž…ë ¥ ë°©ì‹ìž…ë‹ˆë‹¤.\në£¨íŠ¸ë…¸ë“œëŠ” í•˜ë‚˜ì´ì–´ì•¼ í•©ë‹ˆë‹¤.\në˜í•œ ê° ë…¸ë“œëŠ” ë‹¨ê³„ë¥¼ ê±´ë„ˆë›¸ ìˆ˜ ì—†ìœ¼ë©°, ê° ë‹¨ê³„ëŠ” tabìœ¼ë¡œ êµ¬ë¶„ë©ë‹ˆë‹¤.";
-    public static String OVERCHILDNUMMSG = "ì˜¬ë°”ë¥´ì§€ ì•Šì€ ìž…ë ¥ìž…ë‹ˆë‹¤.\ní˜„ìž¬ í•œ ë…¸ë“œ ë‹¹ í—ˆìš©ëœ ìžì‹ì˜ ê°¯ìˆ˜ëŠ” '" + Settings.CHILDRENNUM+ "ê°œ' ìž…ë‹ˆë‹¤.\nConfigs.Numerics.Settingsì„ í†µí•´ CHILDRENNUMê°’ì„ ë³€ê²½í•´ì£¼ì„¸ìš”.";
+    public static String INPUTERRORMSG = "¿Ã¹Ù¸£Áö ¾ÊÀº ÀÔ·Â ¹æ½ÄÀÔ´Ï´Ù.\n·çÆ®³ëµå´Â ÇÏ³ªÀÌ¾î¾ß ÇÕ´Ï´Ù.\n¶ÇÇÑ °¢ ³ëµå´Â ´Ü°è¸¦ °Ç³Ê¶Û ¼ö ¾øÀ¸¸ç, °¢ ´Ü°è´Â tabÀ¸·Î ±¸ºÐµË´Ï´Ù.";
+    public static String OVERCHILDNUMMSG = "¿Ã¹Ù¸£Áö ¾ÊÀº ÀÔ·ÂÀÔ´Ï´Ù.\nÇöÀç ÇÑ ³ëµå ´ç Çã¿ëµÈ ÀÚ½ÄÀÇ °¹¼ö´Â '" + Settings.CHILDRENNUM+ "°³' ÀÔ´Ï´Ù.\nConfigs.Numerics.SettingsÀ» ÅëÇØ CHILDRENNUM°ªÀ» º¯°æÇØÁÖ¼¼¿ä.";
 }

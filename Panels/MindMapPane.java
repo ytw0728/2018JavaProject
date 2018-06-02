@@ -332,8 +332,8 @@ class MindMap extends JPanel{
                 int angle = 360 / Settings.LAYOUTNUM;
                 angle = ( angle * idx ) % 360;
                 int spread = 10;
-                int x = parX + (int)(margin * Math.cos(Math.toRadians(angle))) - now.getWidth()/2 + spread * childrenLoop;
-                int y = parY + (int)(margin * Math.sin(Math.toRadians(angle))) - now.getHeight()/2 + spread * childrenLoop;
+                int x = parX - (int)(margin * Math.cos(Math.toRadians(angle))) - now.getWidth()/2 + spread * childrenLoop;
+                int y = parY - (int)(margin * Math.sin(Math.toRadians(angle))) - now.getHeight()/2 + spread * childrenLoop;
 
                 now.setX(x);
                 now.setY(y);
