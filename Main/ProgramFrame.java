@@ -119,6 +119,8 @@ public class ProgramFrame extends JFrame{
 	public HashMap getComponentsMap(){return componentsMap;}
 	public void setRootHead(JSONNode head){this.rootHead = head; timer.start(); }
 	public void setRootJson(String json){ this.rootJson = json; }
+	public String getRootJson(){return this.rootJson;}
+	public boolean isModified(){return this.modified;}
 	public void setModified(boolean t){this.modified = (this.modified || t);}
 	public void setComponentsParent(){
 		MenuBar.setParent(this);
