@@ -5,6 +5,7 @@ import Components.DarkLabel;
 import Components.WhiteTextField;
 import Configs.Colors.ColorSwitch;
 import Configs.Colors.NodeColor;
+import Configs.Common;
 import DataStructures.JSONNode;
 import Main.ProgramFrame;
 
@@ -39,6 +40,7 @@ public class AttributePane extends JPanel{
         scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension( 13, Integer.MAX_VALUE));
+        scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVisible(false);
         add(scroll);

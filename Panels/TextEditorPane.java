@@ -4,6 +4,7 @@ import Components.BlueButton;
 import Components.DarkLabel;
 
 import Configs.Colors.ColorSwitch;
+import Configs.Common;
 import Configs.Fonts.FontSwitch;
 import DataStructures.CompactNode;
 import DataStructures.JSONNode;
@@ -36,6 +37,7 @@ public class TextEditorPane extends JPanel {
         scroll.setBounds(0,y/20,x,y - 3*y/20);
         scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
+        scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
         add(scroll);
 
         BlueButton applicationBtn = new BlueButton("적용하기");

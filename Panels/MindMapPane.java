@@ -4,6 +4,7 @@ import Components.DarkLabel;
 import Components.NodeLabel;
 import Configs.Colors.ColorSwitch;
 import Configs.Colors.NodeColor;
+import Configs.Common;
 import Configs.Fonts.FontSwitch;
 import Configs.Numerics.Settings;
 import DataStructures.JSONNode;
@@ -11,6 +12,8 @@ import Main.ProgramFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
@@ -40,9 +43,12 @@ public class MindMapPane extends JPanel {
         scroll.setBounds(0,y/20, x, (y-y/20));
         scroll.getViewport().setBounds(0,0, x, (y-y/20));
         scroll.setBorder(new EmptyBorder(0,0,0,0));
+        scroll.setBackground(ColorSwitch.init(ColorSwitch.DARK));
         scroll.setViewportBorder(null);
         scroll.getViewport().setViewSize(new Dimension(x * 3, ( y -y/20 )* 3));
 
+        scroll.getVerticalScrollBar().setUI(Common.MindMapScrollUI());
+        scroll.getHorizontalScrollBar().setUI(Common.MindMapScrollUI());
         scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 0));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, Integer.MAX_VALUE));
         scroll.setVisible(true);
@@ -451,7 +457,6 @@ class MindMap extends JPanel{
                 pressedWidth = target.getWidth();
                 pressedHeight = target.getHeight();
                 fixCursorPointer = cursorPointer;
-                System.out.println( target.getX()  + " " + (e.getXOnScreen() - getLocationOnScreen().x));
             }
             if( !targetSelected && target != null ){
                 target.setSelection(false);
