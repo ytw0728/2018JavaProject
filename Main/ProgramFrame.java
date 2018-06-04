@@ -22,6 +22,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class ProgramFrame extends JFrame{
+	private String title = "∏∂¿ŒµÂ∏ ";
+
 	private UtilBars.MenuBar MenuBar;
 	private UtilBars.ToolBar ToolBar;
 	private TextEditorPane TE;
@@ -32,7 +34,10 @@ public class ProgramFrame extends JFrame{
 	private JSONNode rootHead = null;
 	private String rootJson = "";
 	private boolean modified = false;
+	private boolean jsonNeedModifying = false;
 	private Gson gson = new Gson();
+
+	private String fileName = "";
 
 	public ProgramFrame(){
 		this(Main.defaultSize[0], Main.defaultSize[1],Main.defaultSize[2], Main.defaultSize[3]);
@@ -84,6 +89,7 @@ public class ProgramFrame extends JFrame{
 		layout(ToolBar);
 		layout(split1);
 
+		setTitle("∏∂¿ŒµÂ∏ ");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		componentsMap.put("PF", this);
 		componentsMap.put("TE", TE);
@@ -118,10 +124,20 @@ public class ProgramFrame extends JFrame{
 	}
 	public HashMap getComponentsMap(){return componentsMap;}
 	public void setRootHead(JSONNode head){this.rootHead = head; timer.start(); }
-	public void setRootJson(String json){ this.rootJson = json; }
+	public void setRootJson(String json){
+		if( jsonNeedModifying ){
+			jsonNeedModifying = false;
+			CompactNode ct = CompactNode.makeTree(rootHead); // for changing to json
+			setRootJson(gson.toJson(ct));
+		}
+		this.rootJson = json;
+	}
 	public String getRootJson(){return this.rootJson;}
+	public void setModified(boolean t){this.modified = (this.modified || t); this.jsonNeedModifying = (this.jsonNeedModifying || t);}
+	public void setModifiedForce(boolean t){this.modified = t;}
 	public boolean isModified(){return this.modified;}
-	public void setModified(boolean t){this.modified = (this.modified || t);}
+	public void setFileName(String str){this.fileName =str; if( !str.equals("") ) title = ("∏∂¿ŒµÂ∏  - "+str); }
+	public String getFileName(){return fileName;}
 	public void setComponentsParent(){
 		MenuBar.setParent(this);
 		ToolBar.setParent(this);
@@ -131,21 +147,30 @@ public class ProgramFrame extends JFrame{
 	}
 	public void clearAll(){
 		timer.stop();
+		fileName = "";
+		title = "∏∂¿ŒµÂ∏ ";
+		setTitle(title);
 		this.rootHead = null;
 		this.rootJson = "";
 		this.modified = false;
+		this.jsonNeedModifying = false;
 		TE.clearText();
 		MM.clear();
 		AB.clear();
 	}
 	public void setWithJSON(String json){
 		clearAll();
+		if(json.equals("")){
+			rootJson = json;
+			timer.start();
+			return;
+		}
 		JSONNode head = getInJSONNode(json);
-
 		MM.setHead(head);
 		MM.printHead();
-
 		rootJson = json;
+		modified = jsonNeedModifying = false;
+		timer.start();
 	}
 	public JSONNode getInJSONNode(String json){
 		CompactNode node = gson.fromJson(json, CompactNode.class );
@@ -154,11 +179,13 @@ public class ProgramFrame extends JFrame{
 	}
 	Timer timer = new Timer(500, new ActionListener() {
 		public void actionPerformed (ActionEvent e) {
-			if( modified ){
-				modified = false;
+			if( jsonNeedModifying ){
+				jsonNeedModifying = false;
 				CompactNode ct = CompactNode.makeTree(rootHead); // for changing to json
 				setRootJson(gson.toJson(ct));
 			}
+			if( modified ) setTitle(title + "*");
+			else setTitle(title);
 		}
 	});
 }

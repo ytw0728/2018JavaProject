@@ -22,6 +22,7 @@ import java.awt.event.ComponentEvent;
 public class TextEditorPane extends JPanel {
     ProgramFrame parent = null;
     private TextEditor editor;
+    private BlueButton applicationBtn;
     public TextEditorPane(int x, int y, String str) {
         setLayout(null);
         setSize(x,y);
@@ -40,8 +41,9 @@ public class TextEditorPane extends JPanel {
         scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
         add(scroll);
 
-        BlueButton applicationBtn = new BlueButton("적용하기");
+        applicationBtn = new BlueButton("적용하기");
         applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
+        applicationBtn.setEnabled(true);
         add(applicationBtn);
 
         setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
@@ -61,6 +63,7 @@ public class TextEditorPane extends JPanel {
             JSONNode head = null;
             @Override
             public void actionPerformed(ActionEvent e) {
+                if( editor.getText().trim().equals("") ) return;
                 data = editor.getText().split("\n");
                 head = null;
                 for( String line : data){
@@ -84,6 +87,9 @@ public class TextEditorPane extends JPanel {
         });
     }
     public void setParent(ProgramFrame frame){ parent = frame;}
+    public void apply(){
+        applicationBtn.doClick();
+    }
     public void clearText(){ editor.clearText(); }
 }
 

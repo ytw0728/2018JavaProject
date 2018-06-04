@@ -12,15 +12,13 @@ import Main.ProgramFrame;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class AttributePane extends JPanel{
     ProgramFrame parent = null;
     private Attribute attr;
     private JScrollPane scroll;
+    private BlueButton applicationBtn;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
         setBounds(0, 0, x, y);
@@ -45,8 +43,9 @@ public class AttributePane extends JPanel{
         scroll.setVisible(false);
         add(scroll);
 
-        BlueButton applicationBtn = new BlueButton("변경하기");
+        applicationBtn = new BlueButton("변경하기");
         applicationBtn.setBounds(0,y - 2*y/20, x, 2*y/20);
+        applicationBtn.setEnabled(true);
         add(applicationBtn);
 
         setBorder(new EmptyBorder(0,0,0,0));
@@ -62,24 +61,33 @@ public class AttributePane extends JPanel{
                 applicationBtn.setBounds(0,size.height - label.getHeight()*2,size.width, 2*label.getHeight());
             }
         });
+
+        applicationBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                attr.applyAttr();
+            }
+        });
+
         applicationBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                attr.applyAttr();
+                ((BlueButton)e.getComponent()).doClick();
             }
         });
     }
     public void setParent(ProgramFrame frame){ parent = frame; attr.setFrame(this.parent); }
     public JFrame getParent(){return parent;}
-    public void showAP(){ scroll.setVisible(true);}
-    public void hideAP(){ scroll.setVisible(false); }
+    public void showAP(){ scroll.setVisible(true); revalidate();}
+    public void hideAP(){ scroll.setVisible(false);revalidate();}
     public void setText(){ attr.setText(); }
     public void setEditTarget(JSONNode target){
         attr.setEditTarget(target);
     }
+    public void apply(){ applicationBtn.doClick(); }
 
-    public void clear(){ attr.clear(); scroll.setVisible(false);}
+    public void clear(){ attr.clear(); scroll.setVisible(false);revalidate();}
 }
 
 class Attribute extends JPanel{

@@ -12,8 +12,6 @@ import Main.ProgramFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
@@ -96,9 +94,9 @@ public class MindMapPane extends JPanel {
     public void setHead(JSONNode head){
         scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 13));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
-        revalidate();
         mindMap.setHead(head);
         parent.setRootHead(head);
+        revalidate();
     }
     public void printHead(){
         Rectangle scrollBounds = scroll.getViewport().getViewRect();
@@ -108,6 +106,7 @@ public class MindMapPane extends JPanel {
         scroll.getHorizontalScrollBar().setValue(scrollX);
         scroll.getVerticalScrollBar().setValue(scrollY);
         mindMap.printHead();
+        revalidate();
     }
     public void clear(){
         mindMap.clear();
@@ -146,8 +145,6 @@ class MindMap extends JPanel{
             g.setColor(ColorSwitch.init(ColorSwitch.DARK));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
-        g = null;
-        g2d = null;
         revalidate();
     }
     public MindMap(int x, int y, int width, int height) {
@@ -185,17 +182,19 @@ class MindMap extends JPanel{
     }
     public void setHead(JSONNode head){ initialized = false; this.head = head; }
     public void printHead(){
-        timer.stop();
         initialized = false;
+        frame.setModified(true);
+        modified = false;
         requestFocusInWindow();
-        if( g == null || g2d == null){
+        while( g == null || g2d == null){
             repaint();
-            return;
         }
         initAllNodes(head,0,0);
         initialized = true;
         repaint();
         timer.start();
+
+        revalidate();
     }
 
     @Override

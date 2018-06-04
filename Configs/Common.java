@@ -12,6 +12,10 @@ public class Common {
     public static String INPUTERRORMSG = "올바르지 않은 입력 방식입니다.\n루트노드는 하나이어야 합니다.\n또한 각 노드는 단계를 건너뛸 수 없으며, 각 단계는 tab으로 구분됩니다.";
     public static String OVERCHILDNUMMSG = "올바르지 않은 입력입니다.\n현재 한 노드 당 허용된 자식의 갯수는 '" + Settings.CHILDRENNUM+ "개' 입니다.\nConfigs.Numerics.Settings을 통해 CHILDRENNUM값을 변경해주세요.";
 
+    public static String FILESAVEERRORMSG = "파일 저장이 정상적으로 수행되지 않았습니다. 다시 시도해주세요.";
+    public static String FILENOTFOUNDERRORMSG = "해당 파일이 존재하지 않습니다.";
+    public static String FILEIOERRORMSG = "해당 파일을 읽을 수 없습니다.";
+    public static String OPENERRORMSG = "파일 불러오기를 실패했습니다. 다시 시도해주세요.";
 
     public static BasicScrollBarUI MindMapScrollUI() {
         return new BasicScrollBarUI(){
