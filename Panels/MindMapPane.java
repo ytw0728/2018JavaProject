@@ -142,10 +142,10 @@ class MindMap extends JPanel{
         targetSelected = false;
         cursorPointer = 0;
         POINTERTYPE = Cursor.DEFAULT_CURSOR;
-
-        g.setColor(ColorSwitch.init(ColorSwitch.DARK));
-        g.fillRect(0,0,getWidth(),getHeight());
-
+        if( g != null ) {
+            g.setColor(ColorSwitch.init(ColorSwitch.DARK));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
         g = null;
         g2d = null;
         revalidate();
