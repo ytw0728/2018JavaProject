@@ -17,6 +17,9 @@ public class Common {
     public static String FILEIOERRORMSG = "해당 파일을 읽을 수 없습니다.";
     public static String OPENERRORMSG = "파일 불러오기를 실패했습니다. 다시 시도해주세요.";
 
+    public static String NOTCOLORHEXERRORMSG = "올바른 컬러 헥사코드를 입력해주세요 ex) #ffffff";
+    public static String NOTNUMBERERRORMSG = "x, y, width, height는 양의 정수만 입력할 수 있습니다.";
+
     public static BasicScrollBarUI MindMapScrollUI() {
         return new BasicScrollBarUI(){
             @Override

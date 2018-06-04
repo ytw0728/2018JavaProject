@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AttributePane extends JPanel{
     ProgramFrame parent = null;
@@ -188,35 +190,51 @@ class Attribute extends JPanel{
 //                isChanged =true;
 //            }
             if( !(color = whitefield[5].getText().trim()).equals("")){
-                editTarget.setColor(color);
-                isChanged =true;
+                Pattern p = Pattern.compile("^#?([A-fa-f0-9]{6})$");
+                Matcher m = p.matcher(color);
+                if( m.find() ){
+                    editTarget.setColor(color);
+                    isChanged =true;
+                }
+                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
             }
             if( !(textColor = whitefield[6].getText().trim()).equals("")){
-                editTarget.setTextColor(textColor);
-                isChanged =true;
+                Pattern p = Pattern.compile("^#?([A-fa-f0-9]{6})$");
+                Matcher m = p.matcher(textColor);
+                if( m.find() ){
+                    editTarget.setTextColor(textColor);
+                    isChanged =true;
+                }
+                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+
             }
             for( int i = 1; i <= 4; i++) {
                 if (!whitefield[i].getText().trim().equals("")) {
                     try {
                         int num = Integer.parseInt(whitefield[i].getText().trim()); // x
-                        switch (i) {
-                            case 1:
-                                editTarget.setX(num);
-                                break;
-                            case 2:
-                                editTarget.setY(num);
-                                break;
-                            case 3:
-                                editTarget.setWidth(num);
-                                break;
-                            case 4:
-                                editTarget.setHeight(num);
-                                break;
-                            default:
+                        if( num <= 0 ){
+                            JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                        isChanged = true;
+                        else {
+                            switch (i) {
+                                case 1:
+                                    editTarget.setX(num);
+                                    break;
+                                case 2:
+                                    editTarget.setY(num);
+                                    break;
+                                case 3:
+                                    editTarget.setWidth(num);
+                                    break;
+                                case 4:
+                                    editTarget.setHeight(num);
+                                    break;
+                                default:
+                            }
+                            isChanged = true;
+                        }
                     } catch (Exception e) {
-                        System.out.println(e.getStackTrace());
+                        JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
