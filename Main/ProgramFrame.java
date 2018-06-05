@@ -166,6 +166,7 @@ public class ProgramFrame extends JFrame{
 			return;
 		}
 		JSONNode head = getInJSONNode(json);
+		TE.setTextWithNode(head);
 		MM.setHead(head);
 		MM.printHead();
 		rootJson = json;

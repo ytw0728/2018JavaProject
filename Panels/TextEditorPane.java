@@ -86,6 +86,7 @@ public class TextEditorPane extends JPanel {
             }
         });
     }
+    public void setTextWithNode(JSONNode head){editor.setTextWithNode(head);}
     public void setParent(ProgramFrame frame){ parent = frame;}
     public void apply(){
         applicationBtn.doClick();
@@ -94,6 +95,7 @@ public class TextEditorPane extends JPanel {
 }
 
 class TextEditor extends JTextArea {
+    private String text = ""; // for set Text by 'open file' routine
     public TextEditor(int x, int y, int width, int height) {
         setBounds(x,y, width, height);
         setBackground( ColorSwitch.init(ColorSwitch.BRIGHT) );
@@ -109,5 +111,24 @@ class TextEditor extends JTextArea {
     }
     public void clearText(){
         setText(null);
+    }
+    public void setTextWithNode(JSONNode head){
+        text = "";
+        if( head == null ) return;
+        traversalHead(head);
+
+        setText(text);
+    }
+
+    private void traversalHead(JSONNode now){
+        if( now == null ) return;
+        int level = now.getLevel();
+        while( level-- > 0 ) text += "\t";
+        text += now.getData();
+        text += "\n";
+        for( JSONNode node : now.getChildren() ){
+            traversalHead(node);
+        }
+
     }
 }
