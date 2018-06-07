@@ -104,6 +104,7 @@ public class AttributePane extends JPanel{
         scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
 
+        applicationBtn.setBackground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
         revalidate();
     }
 }
@@ -142,7 +143,7 @@ class Attribute extends JPanel{
         labelArr[6] = new DarkLabel("TEXT COLOR");
 
         whitefield = new WhiteTextField[7];
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < whitefield.length; i++) {
             labelArr[i].setSize(getWidth() / 3, getHeight() / 20);
             labelArr[i].setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
             labelArr[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
@@ -150,15 +151,17 @@ class Attribute extends JPanel{
             add(labelArr[i]);
 
             whitefield[i] = new WhiteTextField(getHeight()/20);
-            if( i == 0 ){
-                whitefield[i].setEditable(false);
-                whitefield[i].setEnabled(false);
-            }
+
             whitefield[i].setSize(getWidth() / 3, getHeight() / 20);
             whitefield[i].setBackground(ColorSwitch.init(ColorSwitch.BRIGHTTEST));
             whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             whitefield[i].setCaretColor(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             whitefield[i].setLocation(160, 50 + 90 * i);
+
+            if( i == 0 ){
+                whitefield[i].setEditable(false);
+                whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
+            }
             add(whitefield[i]);
         }
 
@@ -260,13 +263,14 @@ class Attribute extends JPanel{
     }
 
     public void recolor(){
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < whitefield.length; i++) {
             labelArr[i].setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
             labelArr[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             whitefield[i].setBackground(ColorSwitch.init(ColorSwitch.BRIGHTTEST));
             whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             whitefield[i].setCaretColor(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
             whitefield[i].setLocation(160, 50 + 90 * i);
+            if(i == 0 ) whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
         }
 
         revalidate();

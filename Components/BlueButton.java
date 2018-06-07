@@ -4,6 +4,7 @@ import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class BlueButton extends JButton {
@@ -11,7 +12,7 @@ public class BlueButton extends JButton {
         super(str);
         setFont(FontSwitch.init(FontSwitch.LABELTEXT));
         setBackground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
-        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.KEYCOLOR), 1));
+        setBorder(new EmptyBorder(0,0,0,0));
         setForeground(Color.WHITE);
     }
 }

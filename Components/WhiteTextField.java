@@ -14,7 +14,7 @@ public class WhiteTextField extends JTextField {
         this.arc = size;
         setHorizontalAlignment(CENTER);
         setFont(FontSwitch.init(FontSwitch.LABELTEXT));
-        setOpaque(false); // As suggested by @AVD in comment.
+        setOpaque(false);
     }
     protected void paintComponent(Graphics g) {
         g.setColor(getBackground());

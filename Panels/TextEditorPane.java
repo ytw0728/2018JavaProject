@@ -105,7 +105,7 @@ public class TextEditorPane extends JPanel {
         editor.setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
         editor.setCaretColor(ColorSwitch.init(ColorSwitch.DEFAUlT));
         editor.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
-
+        applicationBtn.setBackground(ColorSwitch.init(ColorSwitch.KEYCOLOR));
 
         revalidate();
     }

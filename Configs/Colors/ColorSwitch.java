@@ -36,20 +36,20 @@ public class ColorSwitch extends Color {
                 case OPPOSITION:
                     return new ColorSwitch( 255, 255, 255);
                 case KEYCOLOR:
-                    return new ColorSwitch(100, 148, 237);
+                    return new ColorSwitch(249, 128, 107);
                 case LIGHTFONT:
                     return new ColorSwitch(10, 10, 10);
                 case BRIGHTFONT:
                     return new ColorSwitch(30, 30, 30);
                 case BRIGHTTEST:
-                    return new ColorSwitch(255, 255, 255);
-                case BRIGHT:
                     return new ColorSwitch(200, 200, 200);
+                case BRIGHT:
+                    return new ColorSwitch(230, 230, 230);
                 case DEEPDARK:
-                    return new ColorSwitch(150, 150, 150);
+                    return new ColorSwitch(250, 250, 250);
                 case DARK:
                 default:
-                    return new ColorSwitch(255, 255, 255);
+                    return new ColorSwitch(220, 220, 220);
             }
         }
     }
