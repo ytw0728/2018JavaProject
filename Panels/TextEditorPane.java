@@ -32,7 +32,7 @@ public class TextEditorPane extends JPanel {
 
         label = new DarkLabel(str);
         label.setBounds(0,0,x, y/20);
-        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.PANELLABEL));
         label.setBorder(new EmptyBorder(0,0,0,0));
         add(label);
 
@@ -99,7 +99,7 @@ public class TextEditorPane extends JPanel {
 
     public void recolor(){
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
-        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.PANELLABEL));
         label.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
         editor.setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));

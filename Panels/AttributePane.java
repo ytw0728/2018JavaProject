@@ -29,7 +29,7 @@ public class AttributePane extends JPanel{
 
         label = new DarkLabel(str);
         label.setSize(getWidth(), getHeight()/20);
-        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.PANELLABEL));
         label.setBorder(new EmptyBorder(0,0,0,0));
         add(label);
 
@@ -95,7 +95,7 @@ public class AttributePane extends JPanel{
 
     public void recolor(){
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
-        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.PANELLABEL));
         label.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         attr.setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
         attr.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));

@@ -3,7 +3,7 @@ package Configs.Colors;
 import java.awt.*;
 
 public class ColorSwitch extends Color {
-    public static final int KEYCOLOR= 0, BRIGHT = 1, DARK = 2, DEEPDARK = 3, LIGHTFONT = 4, BRIGHTFONT =5, BRIGHTTEST = 6, DEFAUlT = 7, OPPOSITION = 8;
+    public static final int KEYCOLOR= 0, BRIGHT = 1, DARK = 2, DEEPDARK = 3, LIGHTFONT = 4, BRIGHTFONT =5, BRIGHTTEST = 6, DEFAUlT = 7, OPPOSITION = 8, PANELLABEL = 9;
     public static boolean isDark = true;
     public static ColorSwitch init(int option){
         if( isDark ) {
@@ -24,6 +24,7 @@ public class ColorSwitch extends Color {
                     return new ColorSwitch(47, 51, 61);
                 case DEEPDARK:
                     return new ColorSwitch(33, 37, 43);
+                case PANELLABEL :
                 case DARK:
                 default:
                     return new ColorSwitch(40, 44, 52);
@@ -41,6 +42,8 @@ public class ColorSwitch extends Color {
                     return new ColorSwitch(10, 10, 10);
                 case BRIGHTFONT:
                     return new ColorSwitch(30, 30, 30);
+                case PANELLABEL :
+                    return new ColorSwitch(190,190,190);
                 case BRIGHTTEST:
                     return new ColorSwitch(200, 200, 200);
                 case BRIGHT:
