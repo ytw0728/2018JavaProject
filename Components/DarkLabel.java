@@ -4,7 +4,6 @@ import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class DarkLabel extends JLabel {
     public DarkLabel(String str){

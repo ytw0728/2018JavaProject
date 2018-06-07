@@ -1,20 +1,14 @@
 package UtilBars;
 
 import Configs.Colors.ColorSwitch;
-import Configs.Common;
 import Configs.Fonts.FontSwitch;
 import Main.Main;
 import Main.ProgramFrame;
-import Panels.AttributePane;
-import Panels.TextEditorPane;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ToolBar extends JToolBar{
 	ProgramFrame parent = null;
