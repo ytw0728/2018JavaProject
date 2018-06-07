@@ -63,7 +63,7 @@ public class ProgramFrame extends JFrame{
 
 		TE = new TextEditorPane(width / 4, CompHeight * 20, "Text Editor Pane");
 		MM = new MindMapPane(width / 2, CompHeight * 20, "Mind Map Pane");
-		AB = new AttributePane(width / 4, CompHeight * 20, "Panels.Attribute Pane");
+		AB = new AttributePane(width / 4, CompHeight * 20, "Attribute Pane");
 
 		split1.setDividerSize(0);
 		split2.setDividerSize(0);
