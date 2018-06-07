@@ -13,6 +13,7 @@ import Main.ProgramFrame;
 import com.google.gson.Gson;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,20 +24,22 @@ public class TextEditorPane extends JPanel {
     ProgramFrame parent = null;
     private TextEditor editor;
     private BlueButton applicationBtn;
+    private DarkLabel label;
+    private JScrollPane scroll;
     public TextEditorPane(int x, int y, String str) {
         setLayout(null);
         setSize(x,y);
 
-        DarkLabel label = new DarkLabel(str);
+        label = new DarkLabel(str);
         label.setBounds(0,0,x, y/20);
         label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
-        label.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+        label.setBorder(new EmptyBorder(0,0,0,0));
         add(label);
 
         editor = new TextEditor(0,0, x, y);
-        JScrollPane scroll = new JScrollPane(editor);
+        scroll = new JScrollPane(editor);
         scroll.setBounds(0,y/20,x,y - 3*y/20);
-        scroll.setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+        scroll.setBorder(new EmptyBorder(0,0,0,0));
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, Integer.MAX_VALUE));
         scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
         add(scroll);
@@ -46,7 +49,7 @@ public class TextEditorPane extends JPanel {
         applicationBtn.setEnabled(true);
         add(applicationBtn);
 
-        setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.BRIGHT), 1));
+        setBorder(new EmptyBorder(0,0,0,0));
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
         setVisible(true);
         this.addComponentListener(new ComponentAdapter() {
@@ -92,6 +95,20 @@ public class TextEditorPane extends JPanel {
         applicationBtn.doClick();
     }
     public void clearText(){ editor.clearText(); }
+
+
+    public void recolor(){
+        setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
+        editor.setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
+        editor.setCaretColor(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        editor.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+
+
+        revalidate();
+    }
 }
 
 class TextEditor extends JTextArea {
@@ -103,10 +120,9 @@ class TextEditor extends JTextArea {
         setFont(FontSwitch.init(FontSwitch.EDITOR));
         setLineWrap(true);
         setWrapStyleWord(true);
-        setCaretColor(Color.WHITE);
-
-        setBorder(BorderFactory.createLineBorder ( ColorSwitch.init(ColorSwitch.BRIGHT), 1));
-        setForeground(Color.WHITE);
+        setCaretColor(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        setBorder(new EmptyBorder(0,0,0,0));
+        setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         setVisible(true);
     }
     public void clearText(){

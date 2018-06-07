@@ -1,5 +1,6 @@
 package Components;
 
+import Configs.Colors.ColorSwitch;
 import Configs.Fonts.FontSwitch;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ public class DarkLabel extends JLabel {
         super(str);
         setHorizontalAlignment(SwingConstants.CENTER);
         setFont(FontSwitch.init(FontSwitch.LABELTEXT));
-        setForeground(Color.WHITE);
+        setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         setOpaque(true);
     }
 }

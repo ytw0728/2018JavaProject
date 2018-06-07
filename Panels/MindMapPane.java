@@ -116,6 +116,21 @@ public class MindMapPane extends JPanel {
     }
     public void setTarget(JSONNode target){ mindMap.setTarget(target); }
     public void setCursorPointer(int t){mindMap.setCursorPointer(t);}
+
+
+    public void recolor(){
+        setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setBackground(ColorSwitch.init(ColorSwitch.DEEPDARK) );
+        label.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        scroll.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        scroll.getVerticalScrollBar().setUI(Common.MindMapScrollUI());
+        scroll.getHorizontalScrollBar().setUI(Common.MindMapScrollUI());
+        mindMap.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        mindMap.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        scroll.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+
+        revalidate();
+    }
 }
 
 class MindMap extends JPanel{
@@ -157,7 +172,7 @@ class MindMap extends JPanel{
         setBackground(ColorSwitch.init(ColorSwitch.DARK));
         setBorder(new EmptyBorder(0,0,0,0));
         setDoubleBuffered(true);
-        setForeground(Color.WHITE);
+        setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         setVisible(true);
 
         this.addMouseListener(new MindMapMouseListener());
@@ -271,7 +286,6 @@ class MindMap extends JPanel{
         if( now.getSelection() ) label.setForeground(Color.WHITE);
         else if( !now.getTextColor().trim().equals("")) label.setForeground(Color.decode(now.getTextColor().trim()));
         else label.setForeground(Color.BLACK);
-
 
         add(label);
     }

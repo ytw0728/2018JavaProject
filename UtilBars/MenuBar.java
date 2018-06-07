@@ -21,7 +21,7 @@ public class MenuBar extends JMenuBar {
 	public MenuBar() { 	this(0,0, Main.defaultSize[0], Main.defaultSize[1]/3); }
 	public MenuBar(int x, int y, int width, int height) {
 		setBounds(x,y, width, height);
-		JMenuItem[] menus = new JMenuItem[7];
+		JMenuItem[] menus = new JMenuItem[9];
 		JMenu[] menu = new JMenu[3];
 		menu[0] = new JMenu("파일");
 		menu[1] = new JMenu("저장");
@@ -29,7 +29,7 @@ public class MenuBar extends JMenuBar {
 
 
 		// menuItem 저장, 다른저장, 불러오기 , 새만 , 닫기 생성
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < menu.length; i++) {
 			menu[i].setFont(FontSwitch.init(FontSwitch.MENUBAR));
 		}
 		menus[0] = new JMenuItem("저장");
@@ -39,6 +39,8 @@ public class MenuBar extends JMenuBar {
 		menus[4] = new JMenuItem("닫기");
 		menus[5] = new JMenuItem("적용하기");
 		menus[6] = new JMenuItem("변경하기");
+		menus[7] = new JMenuItem("테마변경");
+		menus[8] = new JMenuItem("자식노드개수변경");
 
 		// menuITem에 단축키 지정
 		menus[0].setAccelerator(KeyStroke.getKeyStroke('S', Event.CTRL_MASK));
@@ -48,9 +50,10 @@ public class MenuBar extends JMenuBar {
 		menus[4].setAccelerator(KeyStroke.getKeyStroke('W', Event.CTRL_MASK));
 		menus[5].setAccelerator(KeyStroke.getKeyStroke('B', Event.CTRL_MASK));
 		menus[6].setAccelerator(KeyStroke.getKeyStroke('M', Event.CTRL_MASK));
+		menus[7].setAccelerator(KeyStroke.getKeyStroke('T', Event.CTRL_MASK));
+		menus[8].setAccelerator(KeyStroke.getKeyStroke('I', Event.CTRL_MASK));
 
-		// menu0에 불러오기 새로만들기 닫기 , menu1에 저장 다른이름으로 저장 만들기
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < menus.length; i++) {
 			menus[i].setFont(FontSwitch.init(FontSwitch.MENUBAR));
 		}
 		menu[0].add(menus[2]);
@@ -60,6 +63,8 @@ public class MenuBar extends JMenuBar {
 		menu[1].add(menus[1]);
 		menu[2].add(menus[5]);
 		menu[2].add(menus[6]);
+		menu[2].add(menus[7]);
+		menu[2].add(menus[8]);
 
 		add(menu[0]);
 		add(menu[1]);
@@ -76,19 +81,16 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e){ ButtonActions.saveAs(); }
 		});
-
 		// 불러오기
 		menus[2].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){ ButtonActions.openFile(); }
 		});
-
 		// 새로만들기
 		menus[3].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){ ButtonActions.newFile(); }
 		});
-
 		// 닫기
 		menus[4].addActionListener(new ActionListener() {
 			@Override
@@ -97,15 +99,19 @@ public class MenuBar extends JMenuBar {
 
 		menus[5].addActionListener(new ActionListener() { // 적용
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				((TextEditorPane)parent.getComponentsMap().get("TE")).apply();
-			}
+			public void actionPerformed(ActionEvent e) { ButtonActions.apply(); }
 		});
 		menus[6].addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				((AttributePane)parent.getComponentsMap().get("AB")).apply();
-			}
+			public void actionPerformed(ActionEvent e) { ButtonActions.modify(); }
+		});
+		menus[7].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { ButtonActions.switchTheme();}
+		});
+		menus[8].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { ButtonActions.setChildrenNum();}
 		});
 	}
     public void setParent(ProgramFrame frame){ parent = frame;}

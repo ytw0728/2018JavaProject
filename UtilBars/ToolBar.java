@@ -18,15 +18,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ToolBar extends JToolBar{
 	ProgramFrame parent = null;
+	private JButton[] menus;
 	public ToolBar() {
 		this(0, Main.defaultSize[1]/5 , Main.defaultSize[0], Main.defaultSize[1]/5 );
 	}
 	public ToolBar(int x, int y, int width, int height) {
 		setBounds(x,y, width, height);
 		setBackground(ColorSwitch.init(ColorSwitch.DARK));
-		setBorder(BorderFactory.createLineBorder (ColorSwitch.init(ColorSwitch.DARK), 1));
+		setBorder(new EmptyBorder(0,0,0,0));
 
-		JButton[] menus = new JButton[7];
+		menus = new JButton[9];
 		menus[0] = new JButton("저장");
 		menus[0].setToolTipText("파일을 저장합니다.");
 		menus[1] = new JButton("다른이름으로 저장");
@@ -41,12 +42,16 @@ public class ToolBar extends JToolBar{
 		menus[5].setToolTipText("마인드맵 양식을 적용하여 시각화합니다.");
 		menus[6] = new JButton("변경");
 		menus[6].setToolTipText("속성창의 변경사항을 적용합니다.");
+		menus[7] = new JButton("테마변경");
+		menus[7].setToolTipText("테마를 변경합니다.");
+		menus[8] = new JButton("자식노드개수변경");
+		menus[8].setToolTipText("각 노드 당 연결 가능한 자식노드의 최대 개수를 변경합니다.");
 
 
-		for( int i = 0; i < 7; i++ ){
+		for( int i = 0; i < menus.length; i++ ){
 			menus[i].setHorizontalAlignment(CENTER);
 			menus[i].setFont( FontSwitch.init(FontSwitch.MENUBAR));
-			menus[i].setForeground(Color.WHITE);
+			menus[i].setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
 			menus[i].setBackground(ColorSwitch.init(ColorSwitch.DARK));
 			menus[i].setBorder(new EmptyBorder(getHeight()/2,10,getHeight()/2,10));
 			add(menus[i]);
@@ -88,18 +93,33 @@ public class ToolBar extends JToolBar{
 
 		menus[5].addActionListener(new ActionListener() { // 적용
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				((TextEditorPane)parent.getComponentsMap().get("TE")).apply();
-			}
+			public void actionPerformed(ActionEvent e) { ButtonActions.apply(); }
 		});
 		menus[6].addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				((AttributePane)parent.getComponentsMap().get("AB")).apply();
-			}
+			public void actionPerformed(ActionEvent e) { ButtonActions.modify(); }
+		});
+
+		menus[7].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { ButtonActions.switchTheme(); }
+		});
+
+		menus[8].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { ButtonActions.setChildrenNum();}
 		});
 	}
 	public void setParent(ProgramFrame frame){ parent = frame;}
+
+	public void recolor(){
+		setBackground(ColorSwitch.init(ColorSwitch.DARK));
+
+		for( int i = 0; i < menus.length; i++ ){
+			menus[i].setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+			menus[i].setBackground(ColorSwitch.init(ColorSwitch.DARK));
+		}
+	}
 }
 
 

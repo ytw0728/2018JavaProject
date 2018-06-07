@@ -53,7 +53,7 @@ public class JSONNode{
     public boolean setChildren(JSONNode newNode){
         if( children.size() < Settings.CHILDRENNUM) children.add(newNode);
         else{
-            JOptionPane.showMessageDialog(null, Common.OVERCHILDNUMMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.OVERCHILDNUMMSG(), "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -118,7 +118,7 @@ public class JSONNode{
                 head = tmp;
             }
             else{
-                JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
             return head;
@@ -128,7 +128,7 @@ public class JSONNode{
             idx--;
         }
         if( idx != 1 ){
-            JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.INPUTERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
         tmp.setParent(now);

@@ -21,12 +21,13 @@ public class AttributePane extends JPanel{
     private Attribute attr;
     private JScrollPane scroll;
     private BlueButton applicationBtn;
+    private DarkLabel label;
     public AttributePane(int x, int y, String str) {
         setLayout(null);
         setBounds(0, 0, x, y);
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
 
-        DarkLabel label = new DarkLabel(str);
+        label = new DarkLabel(str);
         label.setSize(getWidth(), getHeight()/20);
         label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
         label.setBorder(new EmptyBorder(0,0,0,0));
@@ -90,6 +91,21 @@ public class AttributePane extends JPanel{
     public void apply(){ applicationBtn.doClick(); }
 
     public void clear(){ attr.clear(); scroll.setVisible(false);revalidate();}
+
+
+    public void recolor(){
+        setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
+        label.setBackground(ColorSwitch.init(ColorSwitch.DARK));
+        label.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        attr.setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
+        attr.setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
+        attr.setForeground(ColorSwitch.init(ColorSwitch.OPPOSITION));
+        attr.recolor();
+        scroll.getViewport().setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
+        scroll.getVerticalScrollBar().setUI(Common.DefaultScrollBarUI());
+
+        revalidate();
+    }
 }
 
 class Attribute extends JPanel{
@@ -109,9 +125,10 @@ class Attribute extends JPanel{
 
         setPreferredSize(new Dimension(width, 50 + 90 * 7 > height ? 50 + 90 * 7 : height ));
         setBackground(ColorSwitch.init(ColorSwitch.BRIGHT));
+        setForeground(ColorSwitch.init(ColorSwitch.DEFAUlT));
         setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 10));
         setBorder(new EmptyBorder(0,0,0,0));
-        setForeground(Color.WHITE);
+
 
         // by KH
 
@@ -165,8 +182,8 @@ class Attribute extends JPanel{
         }
         else whitefield[5].setText(editTarget.getColor()); // color
 
-        if( editTarget.getColor().trim().equals("") ) {
-            String hexColour = Integer.toHexString(Color.BLACK.getRGB() & 0xffffff);
+        if( editTarget.getTextColor().trim().equals("") ) {
+            String hexColour = Integer.toHexString((Color.BLACK).getRGB() & 0xffffff);
             if (hexColour.length() < 6) {
                 hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
             }
@@ -196,7 +213,7 @@ class Attribute extends JPanel{
                     editTarget.setColor(color);
                     isChanged =true;
                 }
-                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             if( !(textColor = whitefield[6].getText().trim()).equals("")){
                 Pattern p = Pattern.compile("^#?([A-fa-f0-9]{6})$");
@@ -205,7 +222,7 @@ class Attribute extends JPanel{
                     editTarget.setTextColor(textColor);
                     isChanged =true;
                 }
-                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                else JOptionPane.showMessageDialog(null, Common.NOTCOLORHEXERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
 
             }
             for( int i = 1; i <= 4; i++) {
@@ -213,7 +230,7 @@ class Attribute extends JPanel{
                     try {
                         int num = Integer.parseInt(whitefield[i].getText().trim()); // x
                         if( num <= 0 ){
-                            JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, Common.ATTRNUMBERZONEMSG() + Common.NOTNUMBERERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
                         }
                         else {
                             switch (i) {
@@ -234,12 +251,25 @@ class Attribute extends JPanel{
                             isChanged = true;
                         }
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, Common.ATTRNUMBERZONEMSG() + Common.NOTNUMBERERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
             frame.setModified(isChanged);
         }
+    }
+
+    public void recolor(){
+        for (int i = 0; i < 7; i++) {
+            labelArr[i].setBackground( ColorSwitch.init(ColorSwitch.BRIGHT));
+            labelArr[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            whitefield[i].setBackground(ColorSwitch.init(ColorSwitch.BRIGHTTEST));
+            whitefield[i].setForeground(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            whitefield[i].setCaretColor(ColorSwitch.init(ColorSwitch.BRIGHTFONT));
+            whitefield[i].setLocation(160, 50 + 90 * i);
+        }
+
+        revalidate();
     }
 
     public void setFrame(ProgramFrame frame){ this.frame = frame;}

@@ -2,6 +2,8 @@ package UtilBars;
 
 import Configs.Common;
 import Main.ProgramFrame;
+import Panels.AttributePane;
+import Panels.TextEditorPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -32,7 +34,7 @@ public class ButtonActions {
                 parent.setFileName(file.toString());
                 parent.setModifiedForce(false);
             } catch (IOException e1) {
-                JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else if( parent.isModified() ){
@@ -45,7 +47,7 @@ public class ButtonActions {
                 filewrite.close();
                 parent.setModifiedForce(false);
             } catch (IOException e1) {
-                JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -66,7 +68,7 @@ public class ButtonActions {
             parent.setFileName(file.toString());
             parent.setModifiedForce(false);
         } catch (IOException e1) {
-            JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.FILESAVEERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -99,11 +101,11 @@ public class ButtonActions {
             parent.setWithJSON(json.trim());
             parent.setFileName(file.toString());
         } catch (FileNotFoundException e2) {
-            JOptionPane.showMessageDialog(null, Common.FILENOTFOUNDERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.FILENOTFOUNDERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(null, Common.FILEIOERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.FILEIOERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch(Exception ex){
-            JOptionPane.showMessageDialog(null, Common.OPENERRORMSG, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, Common.OPENERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -123,14 +125,41 @@ public class ButtonActions {
         if (parent.isModified()) {
             // display the JOptionPane showConfirmDialog
             String[] buttons = { "예", "아니오" };
-            int reply = JOptionPane.showOptionDialog(null, "저장하지 않았습니다 정말 나가시겠습니까?" + "", "경고창",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, "두번째값");
+            int reply = JOptionPane.showOptionDialog(null, "저장하지 않았습니다 정말 나가시겠습니까?" + "", "경고창", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, "두번째값");
             if (reply == JOptionPane.YES_OPTION) {
                 parent.dispose();
             }
         }
         else{
             parent.dispose();
+        }
+    }
+
+
+    public static void apply(){
+        ((TextEditorPane)parent.getComponentsMap().get("TE")).apply();
+    }
+
+    public static void modify(){
+        ((AttributePane)parent.getComponentsMap().get("AB")).apply();
+    }
+
+    public static void switchTheme(){
+        parent.switchTheme();
+    }
+
+    public static void setChildrenNum(){
+        String input = JOptionPane.showInputDialog("자식 노드 최대 개수");
+        if( input == null || input.trim().equals("")) return;
+        try {
+            int num = Integer.parseInt(input.trim());
+            if( num <= 0 ){
+                JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            parent.setChildrenNum(num);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, Common.NOTNUMBERERRORMSG(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

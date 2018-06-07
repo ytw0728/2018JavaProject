@@ -1,6 +1,8 @@
 package Main;
 
 import Components.NodeLabel;
+import Configs.Colors.ColorSwitch;
+import Configs.Numerics.Settings;
 import DataStructures.CompactNode;
 import DataStructures.JSONNode;
 import Panels.AttributePane;
@@ -180,6 +182,19 @@ public class ProgramFrame extends JFrame{
 		CompactNode node = gson.fromJson(json, CompactNode.class );
 		JSONNode head = node.convertToJSONNode();
 		return head;
+	}
+
+	public void switchTheme(){
+		ColorSwitch.switchTheme();
+		AB.recolor();
+		MM.recolor();
+		TE.recolor();
+		ToolBar.recolor();
+
+		revalidate();
+	}
+	public void setChildrenNum(int num){
+		Settings.setChildrenNum(num);
 	}
 	Timer timer = new Timer(500, new ActionListener() {
 		public void actionPerformed (ActionEvent e) {
