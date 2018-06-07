@@ -6,6 +6,7 @@ import DataStructures.JSONNode;
 import Panels.AttributePane;
 import Panels.MindMapPane;
 import Panels.TextEditorPane;
+import UtilBars.ButtonActions;
 import UtilBars.MenuBar;
 import UtilBars.ToolBar;
 import com.google.gson.Gson;
@@ -99,6 +100,7 @@ public class ProgramFrame extends JFrame{
 		componentsMap.put("ToolBar", ToolBar);
 		NodeLabel.setMM(MM);
 
+		timer.start();
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				super.componentResized(e);
@@ -144,6 +146,7 @@ public class ProgramFrame extends JFrame{
 		MM.setParent(this);
 		AB.setParent(this);
 		TE.setParent(this);
+		ButtonActions.setParent(this);
 	}
 	public void clearAll(){
 		timer.stop();

@@ -162,6 +162,7 @@ class MindMap extends JPanel{
 
         this.addMouseListener(new MindMapMouseListener());
         this.addMouseMotionListener(new MindMapMouseMotionListener());
+
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -469,7 +470,6 @@ class MindMap extends JPanel{
             fixCursorPointer = 0;
         }
     }
-
     public void setCursorPointer(int t){
         switch(t){
             case 0 : POINTERTYPE = Cursor.DEFAULT_CURSOR;
